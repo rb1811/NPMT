@@ -24,6 +24,8 @@ If that doesn't work, try purging and reinstalling:
 
 `sudo apt-get install postgresql`
 
+`pip install psycopg2 `
+
 Switch user to postgres
 
 `sudo su - postgres`
