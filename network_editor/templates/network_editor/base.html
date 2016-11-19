@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    {% load staticfiles %}
+    {% load compile_static %}
+    {% load static %}
+
+    <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}"></script>
+
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <link rel="stylesheet" href="{% static 'sass/application.scss'|compile %}" />
+
+    <title>{% block title %}My amazing site{% endblock %}</title>
+</head>
+
+<body>
+    {% include "network_editor/header.html" %}
+
+    {% block header %}
+    {% endblock %}
+
+    <div id="sidebar">
+        {% block sidebar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog/">Blog</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

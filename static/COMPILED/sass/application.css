@@ -1,0 +1,7 @@
+body {
+  background: red; }
+  body .navbar-brand {
+    padding: 5px 25px; }
+    body .navbar-brand img {
+      height: 40px;
+      width: 40px; }

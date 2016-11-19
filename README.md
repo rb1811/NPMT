@@ -1,6 +1,13 @@
 # npmt-dev
 Formal development of npmt-tool.
 
+```
+pip install django-static-jquery==2.1.4
+pip install django-bootstrap3
+pip install django_forms_bootstrap
+pip install django-static-precompiler
+
+```
 
 1. This is a django based project.
 2. Uses PostgreSQL for database.

@@ -4,4 +4,5 @@ from django.shortcuts import render
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Network editor index.")
+    context = {}
+    return render(request, 'network_editor/index.html', context)
