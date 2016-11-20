@@ -2,11 +2,48 @@
 
 
 
-{% block title %}My amazing blog{% endblock %}
+{% block title %}Network Editor{% endblock %}
 
 {% block content %}
-    {% for entry in blog_entries %}
-        <h2>{{ entry.title }}</h2>
-        <p>{{ entry.body }}</p>
-    {% endfor %}
+    <div class="row">
+        <div class="col-sm-12" id="controls">
+            <div class="btn-group" role="group" aria-label="network-editor-controls">
+                <button type="button" class="btn btn-default">Add Node</button>
+                <button type="button" class="btn btn-default">Add Edge</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3" id="sidebar">
+            {% block sidebar %}
+                <div class="nodes-container">
+                    <h3>Nodes</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="badge"><span class="node-id">1</span></span>
+                            <p>x: <span class="node-x">2.333</span></p>
+                            <p>y: <span class="node-y">5.999</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="edges-container">
+                    <h3>Edges</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="badge"><span class="node-id">1</span></span>
+                            <p>start: Node <span class="node-x">1</span></p>
+                            <p>end: <span class="node-y">5</span></p>
+                        </li>
+                    </ul>
+                </div>
+            {% endblock %}
+        </div>
+
+        <div class="col-sm-9" id="content">
+
+            <div class="well well-lg map-container" id="map">
+
+            </div>
+        </div>
+    </div>
 {% endblock %}
