@@ -5,12 +5,11 @@
 {% load compile_static %}
 {% load static %}
 
-<script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}"></script>
 
 {% load bootstrap3 %}
 {% bootstrap_css %}
-{% bootstrap_javascript %}
 
+<link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}"/>
 <link rel="stylesheet" href="{% static 'sass/application.scss'|compile %}"/>
 
 <title>{% block title %}NPMT{% endblock %}</title>
@@ -23,8 +22,15 @@
 {% endblock %}
 
 <div class="container-fluid">
-{% block content %}{% endblock %}
+    {% block content %}{% endblock %}
 </div>
 
+<script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}"></script>
+{% bootstrap_javascript %}
+<script type="text/javascript" src="{% static 'leaflet/leaflet.js' %}"></script>
+<script type="text/javascript" src="{% static 'leaflet/mercatorConverter.js' %}"></script>
+<script type="text/javascript" src="{% static 'leaflet/leafletembed.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'javascripts/application.js' %}"></script>
 </body>
 </html>
