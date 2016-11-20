@@ -9,6 +9,8 @@ __pycache__/
 
 .idea
 
+*.sass-cache
+**/COMPILED
 
 # Distribution / packaging
 .Python

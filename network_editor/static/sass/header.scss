@@ -1,0 +1,16 @@
+.navbar, .navbar-default {
+  background-color: black;
+  border-color: black;
+  color: white;
+  .navbar-nav {
+    li {
+      a {
+        color: white;
+      }
+      &.active a {
+        background-color: #1c4048;
+        color: white;
+      }
+    }
+  }
+}
