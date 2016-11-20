@@ -11,6 +11,12 @@ function NetworkEditor() {
             myMap.addLayer(osm);
         },
 
+        getNodeTemplate = function (node) {
+            return "<h4>Node Details:</h4>" +
+                "<p> Lat: <span > " + node.lat + " </span></p>" +
+                "<p> Long: <span >" + node.lng + "  </span ></p>";
+        },
+
         initBindings = function () {
             var addNodeBtn = $('#add-node');
             addNodeBtn.on('click', function () {
@@ -27,6 +33,14 @@ function NetworkEditor() {
             myMap.on('click', function (e) {
                 if (mode == modes.add_node) {
                     var newMarker = new L.marker(e.latlng).addTo(myMap);
+                    var popup = L.popup();
+                    newMarker.on('click', function (e) {
+                        if (mode == modes.add_node) {
+                            popup.setLatLng(newMarker.getLatLng())
+                                .setContent(getNodeTemplate(newMarker.getLatLng()))
+                                .openOn(myMap);
+                        }
+                    });
                 }
             });
         };
