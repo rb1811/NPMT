@@ -2,6 +2,28 @@ function NetworkEditor() {
     var modes = {add_node: 1, add_edge: 2};
     var myMap, newMarker, markerLocation;
     var mode = modes.add_node;
+    var edgeStartNodeAlreadySet = false;
+    var startIcon = null;
+    var defaultIcon = null;
+
+    function showNodeDetail(popup, newMarker) {
+        popup.setLatLng(newMarker.getLatLng())
+            .setContent(getNodeTemplate(newMarker.getLatLng()))
+            .openOn(myMap);
+    }
+
+    function addEdge(startNode, newMarker) {
+        edgeStartNodeAlreadySet = false;
+        startNode.setIcon(defaultIcon);
+        if (startNode != newMarker) {
+            var latlngs = [
+                [startNode.getLatLng().lat, startNode.getLatLng().lng],
+                [newMarker.getLatLng().lat, newMarker.getLatLng().lng]
+            ];
+            var polyline = L.polyline(latlngs, {color: 'red'}).addTo(myMap);
+        }
+    }
+
     var setupMap = function () {
             myMap = L.map('map').setView([38.487, -75.641], 8);
             var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -9,6 +31,14 @@ function NetworkEditor() {
             var osm = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 18, attribution: osmAttrib});
             myMap.setView(new L.LatLng(33.428242, -111.598434), 5);
             myMap.addLayer(osm);
+            startIcon = L.icon({
+                iconUrl: '/static/leaflet/images/marker-icon-orange.png',
+                shadowUrl: '/static/leaflet/images/marker-shadow.png'
+            });
+            defaultIcon = L.icon({
+                iconUrl: '/static/leaflet/images/marker-icon.png',
+                shadowUrl: '/static/leaflet/images/marker-shadow.png'
+            });
         },
 
         getNodeTemplate = function (node) {
@@ -19,26 +49,38 @@ function NetworkEditor() {
 
         initBindings = function () {
             var addNodeBtn = $('#add-node');
+            var addEdgeBtn = $('#add-edge');
+
             addNodeBtn.on('click', function () {
                 mode = modes.add_node;
+                addEdgeBtn.removeClass('active');
+                addNodeBtn.addClass('active');
             });
 
-            var addEdgeBtn = $('#add-edge');
             addEdgeBtn.on('click', function () {
                 mode = modes.add_edge;
+                addEdgeBtn.addClass('active');
+                addNodeBtn.removeClass('active');
             });
         },
 
-        setupAddingNodes = function () {
+        setupAddingNodesAndEdges = function () {
+            var startNode;
             myMap.on('click', function (e) {
                 if (mode == modes.add_node) {
                     var newMarker = new L.marker(e.latlng).addTo(myMap);
                     var popup = L.popup();
                     newMarker.on('click', function (e) {
                         if (mode == modes.add_node) {
-                            popup.setLatLng(newMarker.getLatLng())
-                                .setContent(getNodeTemplate(newMarker.getLatLng()))
-                                .openOn(myMap);
+                            showNodeDetail(popup, newMarker);
+                        } else if (mode == modes.add_edge) {
+                            if (edgeStartNodeAlreadySet == false) {
+                                edgeStartNodeAlreadySet = true;
+                                newMarker.setIcon(startIcon);
+                                startNode = newMarker;
+                            } else {
+                                addEdge(startNode, newMarker);
+                            }
                         }
                     });
                 }
@@ -48,7 +90,7 @@ function NetworkEditor() {
         initMap: function () {
             setupMap();
             initBindings();
-            setupAddingNodes();
+            setupAddingNodesAndEdges();
         }
     }
 }
