@@ -172,8 +172,7 @@ function NetworkEditor() {
                     data: getNetworkDataJson(),
                     success: function (data) {
                         console.log("returned successfully: ", data);
-                    },
-                    dataType: 'json'
+                    }
                 });
 
                 e.preventDefault();

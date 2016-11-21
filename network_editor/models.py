@@ -37,7 +37,6 @@ class Network(models.Model):
         network = cls(name=name, description=description)
         network.save()
         for node in nodes:
-            print node
             n = Node(x=numpy.float(node['lat']), y=numpy.float(node['lng']))
             try:
                 n.save()
