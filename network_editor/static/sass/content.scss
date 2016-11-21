@@ -5,7 +5,7 @@
     }
   }
 
-  .node-list{
+  .node-list {
     .node-list-item {
       position: relative;
       p {
@@ -18,4 +18,30 @@
       }
     }
   }
+  .edge-list {
+    .edge-list-item {
+      position: relative;
+      .delete-edge {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+      }
+    }
+  }
+
+  #sidebar {
+    .list-title {
+      width: 100px;
+      font-size:x-large;
+    }
+    #add-node, #add-edge {
+      margin-bottom: 10px;
+    }
+  }
+
+  .edge-list, .node-list {
+    max-height: 180px;
+    overflow: auto;
+  }
+
 }

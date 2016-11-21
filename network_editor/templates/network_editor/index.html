@@ -5,31 +5,25 @@
 {% block title %}Network Editor{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-sm-12" id="controls">
-            <div class="btn-group" role="group" aria-label="network-editor-controls">
-                <button type="button" class="btn btn-default active" id="add-node">Add Node</button>
-                <button type="button" class="btn btn-default" id="add-edge">Add Edge</button>
-            </div>
-        </div>
-    </div>
-    <div class="row">
+        <div class="row">
         <div class="col-sm-3" id="sidebar">
             {% block sidebar %}
                 <div class="nodes-container">
-                    <h3>Nodes</h3>
+                    <div>
+                        <p class="list-title inline-block">Nodes</p>
+                        <button type="button" class="btn btn-xs btn-default active" id="add-node">Add Node</button>
+                    </div>
                     <ul class="list-group node-list">
 
                     </ul>
                 </div>
                 <div class="edges-container">
-                    <h3>Edges</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <span class="badge"><span class="node-id">1</span></span>
-                            <p>start: Node <span class="node-x">1</span></p>
-                            <p>end: <span class="node-y">5</span></p>
-                        </li>
+                    <div>
+                        <p class="list-title inline-block">Edges</p>
+                        <button type="button" class="btn btn-xs btn-default" id="add-edge">Add Edge</button>
+                    </div>
+                    <ul class="list-group edge-list">
+
                     </ul>
                 </div>
             {% endblock %}

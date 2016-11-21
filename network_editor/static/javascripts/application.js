@@ -14,6 +14,23 @@ function NetworkEditor() {
             .openOn(myMap);
     }
 
+    function addEdgeToList(start, end, edge) {
+        var $edgeLsit = $('.edge-list');
+        var view = {
+            startLat: start.getLatLng().lat,
+            startLng: start.getLatLng().lng,
+            endLat: end.getLatLng().lat,
+            endLng: end.getLatLng().lng
+        };
+        var output = Mustache.render(network_editor.templates.edge, view);
+        var edgeEl = $(output);
+        edgeEl.find('.delete-edge').on('click', function (e) {
+            edge.remove();
+            $(this).parent('li').remove();
+        });
+        $edgeLsit.append(edgeEl);
+    }
+
     function addEdge(startNode, newMarker) {
         edgeStartNodeAlreadySet = false;
         startNode.setIcon(defaultIcon);
@@ -22,19 +39,20 @@ function NetworkEditor() {
                 [startNode.getLatLng().lat, startNode.getLatLng().lng],
                 [newMarker.getLatLng().lat, newMarker.getLatLng().lng]
             ];
-            var polyline = L.polyline(latlngs, {color: 'red'}).addTo(myMap);
+            var polyline = L.polyline(latlngs, {color: 'red'});
+            polyline.addTo(myMap);
+            addEdgeToList(startNode, newMarker, polyline);
         }
     }
 
     function addNodeToList(newMarker) {
         var $nodeLsit = $('.node-list');
-        var numberOfNodes = $nodeLsit.children().length;
         var view = {
             lat: newMarker.getLatLng().lat.toString(),
-            long: newMarker.getLatLng().lng.toString()
+            lng: newMarker.getLatLng().lng.toString()
         };
         var output = Mustache.render(network_editor.templates.node, view);
-        nodeEl = $(output);
+        var nodeEl = $(output);
         nodeEl.find('.delete-node').on('click', function (e) {
             newMarker.remove();
             $(this).parent('li').remove();
