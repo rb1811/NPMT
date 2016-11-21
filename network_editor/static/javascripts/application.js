@@ -6,6 +6,8 @@ function NetworkEditor() {
     var startIcon = null;
     var defaultIcon = null;
 
+    var nodeTemplate = network_editor.templates.node;
+
     function showNodeDetail(popup, newMarker) {
         popup.setLatLng(newMarker.getLatLng())
             .setContent(getNodeTemplate(newMarker.getLatLng()))
@@ -22,6 +24,22 @@ function NetworkEditor() {
             ];
             var polyline = L.polyline(latlngs, {color: 'red'}).addTo(myMap);
         }
+    }
+
+    function addNodeToList(newMarker) {
+        var $nodeLsit = $('.node-list');
+        var numberOfNodes = $nodeLsit.children().length;
+        var view = {
+            lat: newMarker.getLatLng().lat.toString(),
+            long: newMarker.getLatLng().lng.toString()
+        };
+        var output = Mustache.render(network_editor.templates.node, view);
+        nodeEl = $(output);
+        nodeEl.find('.delete-node').on('click', function (e) {
+            newMarker.remove();
+            $(this).parent('li').remove();
+        });
+        $nodeLsit.append(nodeEl);
     }
 
     var setupMap = function () {
@@ -83,6 +101,7 @@ function NetworkEditor() {
                             }
                         }
                     });
+                    addNodeToList(newMarker);
                 }
             });
         };

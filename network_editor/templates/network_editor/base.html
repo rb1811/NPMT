@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    {% load staticfiles %}
+    {% load compile_static %}
+    {% load static %}
 
-{% load staticfiles %}
-{% load compile_static %}
-{% load static %}
 
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
 
-{% load bootstrap3 %}
-{% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}"/>
+    <link rel="stylesheet" href="{% static 'sass/application.scss'|compile %}"/>
 
-<link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}"/>
-<link rel="stylesheet" href="{% static 'sass/application.scss'|compile %}"/>
-
-<title>{% block title %}NPMT{% endblock %}</title>
+    <title>{% block title %}NPMT{% endblock %}</title>
 </head>
 
 <body class="network-editor">
+
 {% include "network_editor/header.html" %}
 
 {% block header %}
@@ -26,6 +27,8 @@
 </div>
 
 <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'javascripts/lib/mustache.js' %}"></script>
+<script type="text/javascript" src="{% static 'javascripts/mustache-templates.js' %}"></script>
 {% bootstrap_javascript %}
 <script type="text/javascript" src="{% static 'leaflet/leaflet.js' %}"></script>
 <script type="text/javascript" src="{% static 'leaflet/mercatorConverter.js' %}"></script>
