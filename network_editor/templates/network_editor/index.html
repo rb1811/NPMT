@@ -5,7 +5,7 @@
 {% block title %}Network Editor{% endblock %}
 
 {% block content %}
-        <div class="row">
+    <div class="row">
         <div class="col-sm-3" id="sidebar">
             {% block sidebar %}
                 <div class="nodes-container">
@@ -31,8 +31,18 @@
 
         <div class="col-sm-9" id="content">
 
+            <div>
+                <label for="name">Name:</label> <input class='network-name' type="text" value="" placeholder="Enter network name">
+                <label for="name">description:</label> <input class='network-description' type="text" value="" placeholder="Enter short description">
+            </div>
             <div class="well well-lg map-container" id="map">
 
+            </div>
+            <div>
+                <form id="network-form" action='#' data-url="{% url 'network_editor:save' %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Save"/>
+                </form>
             </div>
         </div>
     </div>

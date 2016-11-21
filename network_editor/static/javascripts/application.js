@@ -60,6 +60,29 @@ function NetworkEditor() {
         $nodeLsit.append(nodeEl);
     }
 
+    var getNetworkDataJson = function () {
+        var nodes = [];
+        $('.node-list').children().map(function (i, node) {
+            nodes.push({lat: $(node).data('lat'), lng: $(node).data('lng')});
+        });
+
+        var edges = [];
+        $('.edge-list').children().map(function (i, edge) {
+            edges.push({
+                start: {lat: $(edge).data('startLat'), lng: $(edge).data('startLng')},
+                end: {lat: $(edge).data('endLat'), lng: $(edge).data('endLng')}
+            });
+        });
+
+        var name = $('input.network-name').val();
+        var description = $('input.network-description').val();
+        return JSON.stringify({
+            name: name,
+            description: description,
+            nodes: nodes,
+            edges: edges
+        });
+    };
     var setupMap = function () {
             myMap = L.map('map').setView([38.487, -75.641], 8);
             var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -122,12 +145,49 @@ function NetworkEditor() {
                     addNodeToList(newMarker);
                 }
             });
+        },
+
+        bindSave = function () {
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        var csrftoken = Cookies.get('csrftoken');
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+            $('#network-form').on('submit', function (e) {
+                var url = $(this).data('url');
+                var method = $(this).attr('method');
+
+                $.ajax({
+                    type: method,
+                    url: url,
+                    data: getNetworkDataJson(),
+                    success: function (data) {
+                        console.log("returned successfully: ", data);
+                    },
+                    dataType: 'json'
+                });
+
+                e.preventDefault();
+                return false;
+            });
         };
     return {
         initMap: function () {
             setupMap();
             initBindings();
             setupAddingNodesAndEdges();
+        },
+        setOnSave: function () {
+            bindSave();
         }
     }
 }
@@ -136,4 +196,5 @@ function NetworkEditor() {
 $(function () {
     var networkEditor = new NetworkEditor();
     networkEditor.initMap();
+    networkEditor.setOnSave();
 });
