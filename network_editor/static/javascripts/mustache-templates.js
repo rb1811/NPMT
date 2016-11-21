@@ -13,6 +13,13 @@ window.network_editor = {
         '<p class="edge-start">Start: (<span class="truncate">{{startLat}}</span>,<span class="truncate">{{startLng}}</span>)</p>' +
         '<p class="edge-end">End: (<span class="truncate">{{endLat}}</span>, <span class="truncate">{{endLng}}</span>)</p>' +
         '<input type="button" value="Delete" class="btn btn-xs btn-danger delete-edge pull-right"> ' +
-        '</li>'
+        '</li>',
+
+        network: '<tr>' +
+        '<th scope="row">{{index}}</th>' +
+        '<td>{{name}}</td>' +
+        '<td>{{description}}</td>' +
+        '<td><input type="radio" name="optionsNetwork" id="network-id-{{id}}" value="{{id}}" checked></td>' +
+        '</tr>'
     }
 };

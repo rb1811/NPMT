@@ -8,6 +8,21 @@ function NetworkEditor() {
 
     var nodeTemplate = network_editor.templates.node;
 
+    function createNetworkTable(networks) {
+        networks.forEach(function (network, index) {
+            var view = {
+                    index: index+1,
+                    id: network.pk,
+                    name: network.fields.name,
+                    description: network.fields.description
+                },
+                template = network_editor.templates.network;
+            var output = Mustache.render(template, view);
+            var networkRowEl = $(output);
+            $('#networks-table').find('tbody').append(networkRowEl);
+        });
+    }
+
     function showNodeDetail(popup, newMarker) {
         popup.setLatLng(newMarker.getLatLng())
             .setContent(getNodeTemplate(newMarker.getLatLng()))
@@ -147,6 +162,18 @@ function NetworkEditor() {
             });
         },
 
+        bindLoadNetworkModal = function () {
+            $('#load-network-modal').on('show.bs.modal', function (e) {
+                var url = $(this).data('url');
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    success: function (data) {
+                        createNetworkTable(data.networks);
+                    }
+                });
+            });
+        },
         bindSave = function () {
             function csrfSafeMethod(method) {
                 // these HTTP methods do not require CSRF protection
@@ -187,6 +214,9 @@ function NetworkEditor() {
         },
         setOnSave: function () {
             bindSave();
+        },
+        bindLoadNetworkModal: function () {
+            bindLoadNetworkModal();
         }
     }
 }
@@ -196,4 +226,5 @@ $(function () {
     var networkEditor = new NetworkEditor();
     networkEditor.initMap();
     networkEditor.setOnSave();
+    networkEditor.bindLoadNetworkModal();
 });

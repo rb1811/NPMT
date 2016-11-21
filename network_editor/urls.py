@@ -7,4 +7,5 @@ urlpatterns = [
     # ex: /network_editor/
     url(r'^$', views.index, name='index'),
     url(r'^save$', views.save, name='save'),
+    url(r'^load', views.load, name='load'),
 ]
