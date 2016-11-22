@@ -43,8 +43,9 @@
             </div>
 
             <div>
-                <form id="network-form" action='#' class="inline-block" data-url="{% url 'network_editor:save' %}"
-                      method="post">
+                <form id="network-form" action='#' class="inline-block" data-id="{{ network_id }}"
+                      data-save-url="{% url 'network_editor:save' %}"
+                      data-update-url="{% url 'network_editor:update' %}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="btn btn-sm btn-default" value="Save"/>
                 </form>
@@ -61,7 +62,6 @@
     <script type="text/javascript">
 
         window.network_editor = window.network_editor ? window.network_editor : {};
-
         window.network_editor.mode = '{{ mode }}';
         window.network_editor.network = '{{ network }}';
         window.network_editor.edges = '{{ edges }}';

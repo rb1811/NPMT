@@ -70,7 +70,6 @@ function NetworkLoader() {
         return returnVal;
     }
 
-
     function addEdgesToMap() {
         var nodeSet = [];
         var mapNodes = [];

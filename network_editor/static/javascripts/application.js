@@ -30,7 +30,10 @@ function NetworkEditor() {
 
         var name = $('input.network-name').val();
         var description = $('input.network-description').val();
+        var id = $('#network-form').data('id');
+
         return JSON.stringify({
+            id: id,
             name: name,
             description: description,
             nodes: nodes,
@@ -148,10 +151,17 @@ function NetworkEditor() {
                 }
             });
 
-            $('#network-form').on('submit', function (e) {
-                var url = $(this).data('url');
-                var method = $(this).attr('method');
+            function getUrl() {
+                if (window.network_editor.mode == 'edit') {
+                    return $(this).data('update-url');
+                } else {
+                    return $(this).data('save-url');
+                }
+            }
 
+            $('#network-form').on('submit', function (e) {
+                var method = $(this).attr('method');
+                var url = getUrl.call(this);
                 $.ajax({
                     type: method,
                     url: url,

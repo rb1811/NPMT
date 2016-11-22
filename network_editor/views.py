@@ -1,4 +1,5 @@
 import json
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.http import JsonResponse
 import HTMLParser
@@ -16,9 +17,8 @@ def index(request):
 @csrf_protect
 def save(request):
     network = json.loads(request.body)
-    context = {'active_tab': 'network_editor', 'network': network}
     Network.create_from_nodes_and_edges(network['name'], network['description'], network['nodes'], network['edges'])
-    return JsonResponse(context)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def load(request):
@@ -37,5 +37,13 @@ def edit(request, network_id):
         for e in edges]
     edges_json = json.dumps(edges_list)
     network_json = HTMLParser.HTMLParser().unescape(network_json)
-    context = {'active_tab': 'network_editor','mode': 'edit' ,'network': network_json, 'edges': edges_json}
+    context = {'active_tab': 'network_editor', 'mode': 'edit', 'network': network_json, 'edges': edges_json,
+               'network_id': network_id}
     return render(request, 'network_editor/index.html', context)
+
+
+def update(request):
+    network = json.loads(request.body)
+    Network.update_from_nodes_and_edges(network['id'], network['name'], network['description'], network['nodes'],
+                                        network['edges'])
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
