@@ -50,16 +50,18 @@ function ViewEditor() {
 
     function createNetworkTable(networks) {
         networks.forEach(function (network, index) {
+            var $networks = $('#networks-table');
             var view = {
                     index: index + 1,
                     id: network.pk,
                     name: network.fields.name,
-                    description: network.fields.description
+                    description: network.fields.description,
+                    url: $networks.data('url')
                 },
                 template = network_editor.templates.network;
             var output = Mustache.render(template, view);
             var networkRowEl = $(output);
-            $('#networks-table').find('tbody').append(networkRowEl);
+            $networks.find('tbody').append(networkRowEl);
         });
     }
 

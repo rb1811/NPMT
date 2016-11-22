@@ -9,23 +9,25 @@
                     <h4 class="modal-title" id="myModalLabel">Load Network</h4>
                 </div>
                 <div class="modal-body">
-                    <table id="networks-table" class="table table-hover">
-                        <caption>Stored Networks:</caption>
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>selection</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div class="table-container">
+                        <table id="networks-table" data-url="{% url 'network_editor:index' %}"
+                               class="table table-hover">
+                            <caption>Stored Networks:</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>selection</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </div>

@@ -18,6 +18,6 @@ window.network_editor.templates = {
     '<th scope="row">{{index}}</th>' +
     '<td>{{name}}</td>' +
     '<td>{{description}}</td>' +
-    '<td><input type="radio" name="optionsNetwork" id="network-id-{{id}}" value="{{id}}" checked></td>' +
+    '<td><a href="{{url}}{{id}}">Load</a></td>' +
     '</tr>'
 };
