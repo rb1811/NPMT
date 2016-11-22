@@ -6,6 +6,7 @@ function NetworkEditor() {
     var startIcon = null;
     var defaultIcon = null;
     var viewEditor;
+    var edgeStartNode;
 
     function showNodeDetail(popup, newMarker) {
         popup.setLatLng(newMarker.getLatLng())
@@ -76,26 +77,46 @@ function NetworkEditor() {
             });
         },
 
+        addNode = function (node) {
+            viewEditor.addNodeToList(node);
+            var popup = L.popup();
+            node.on('click', function (e) {
+                if (mode == modes.add_node) {
+                    showNodeDetail(popup, node);
+                } else if (mode == modes.add_edge) {
+                    if (edgeStartNodeAlreadySet == false) {
+                        edgeStartNodeAlreadySet = true;
+                        node.setIcon(startIcon);
+                        edgeStartNode = node;
+                    } else {
+                        edgeStartNodeAlreadySet = viewEditor.addEdge(myMap, edgeStartNode, node, defaultIcon);
+                    }
+                }
+            });
+        },
+
         setupAddingNodesAndEdges = function () {
-            var startNode;
+            // var startNode;
             myMap.on('click', function (e) {
                 if (mode == modes.add_node) {
                     var newMarker = new L.marker(e.latlng).addTo(myMap);
-                    var popup = L.popup();
-                    newMarker.on('click', function (e) {
-                        if (mode == modes.add_node) {
-                            showNodeDetail(popup, newMarker);
-                        } else if (mode == modes.add_edge) {
-                            if (edgeStartNodeAlreadySet == false) {
-                                edgeStartNodeAlreadySet = true;
-                                newMarker.setIcon(startIcon);
-                                startNode = newMarker;
-                            } else {
-                                edgeStartNodeAlreadySet = viewEditor.addEdge(myMap, startNode, newMarker, defaultIcon);
-                            }
-                        }
-                    });
-                    viewEditor.addNodeToList(newMarker);
+                    addNode(newMarker);
+                    // var popup = L.popup();
+
+                    // newMarker.on('click', function (e) {
+                    //     if (mode == modes.add_node) {
+                    //         showNodeDetail(popup, newMarker);
+                    //     } else if (mode == modes.add_edge) {
+                    //         if (edgeStartNodeAlreadySet == false) {
+                    //             edgeStartNodeAlreadySet = true;
+                    //             newMarker.setIcon(startIcon);
+                    //             startNode = newMarker;
+                    //         } else {
+                    //             edgeStartNodeAlreadySet = viewEditor.addEdge(myMap, startNode, newMarker, defaultIcon);
+                    //         }
+                    //     }
+                    // });
+                    // viewEditor.addNodeToList(newMarker);
                 }
             });
         },
@@ -160,7 +181,12 @@ function NetworkEditor() {
         },
         getMap: function () {
             return myMap;
-        }
+        },
+        getMode: function () {
+            return mode;
+        },
+        showNodeDetail: showNodeDetail,
+        addNode: addNode
     }
 }
 
@@ -172,7 +198,7 @@ $(function () {
 
     if (window.network_editor.mode == 'edit') {
         var networkLoader = new NetworkLoader();
-        networkLoader.init(viewEditor);
+        networkLoader.init(viewEditor, networkEditor);
         networkLoader.loadMap(networkEditor.getMap());
     }
 });

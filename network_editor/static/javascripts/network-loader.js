@@ -34,7 +34,12 @@ var Util = {
 
 function NetworkLoader() {
 
-    var network, edges, myMap, viewEditor;
+    var network, edges, myMap, viewEditor, nodeEditor, mode;
+    var defaultIcon = L.icon({
+        iconUrl: '/static/leaflet/images/marker-icon.png',
+        shadowUrl: '/static/leaflet/images/marker-shadow.png'
+    });
+
 
     function readData() {
         var decodedString = Util.htmlDecode(window.network_editor.network);
@@ -65,14 +70,11 @@ function NetworkLoader() {
         return returnVal;
     }
 
+
     function addEdgesToMap() {
         var nodeSet = [];
         var mapNodes = [];
         var startMarker, endMarker;
-        var defaultIcon = L.icon({
-            iconUrl: '/static/leaflet/images/marker-icon.png',
-            shadowUrl: '/static/leaflet/images/marker-shadow.png'
-        });
         edges.forEach(function (edge) {
             var startNode = edge.start_node,
                 endNode = edge.end_node;
@@ -82,14 +84,14 @@ function NetworkLoader() {
                 nodeSet.push(startNode);
                 mapNodes.push(startMarker);
                 startMarker.addTo(myMap);
-                viewEditor.addNodeToList(startMarker);
+                nodeEditor.addNode(startMarker);
             }
             endMarker = new L.marker([endNode.x, endNode.y]);
             if (!nodeExists(nodeSet, endNode)) {
                 nodeSet.push(endNode);
                 mapNodes.push(endMarker);
                 endMarker.addTo(myMap);
-                viewEditor.addNodeToList(endMarker);
+                nodeEditor.addNode(endMarker);
             }
 
             viewEditor.addEdge(myMap, startMarker, endMarker, defaultIcon);
@@ -102,9 +104,14 @@ function NetworkLoader() {
         addEdgesToMap();
     }
 
+    function setNodeEditor(nEditor) {
+        nodeEditor = nEditor;
+    }
+
     return {
-        init: function (vEditor) {
+        init: function (vEditor, nEditor) {
             setViewEditor(vEditor);
+            setNodeEditor(nEditor);
         },
         loadMap: function (myMap) {
             setMap(myMap);
