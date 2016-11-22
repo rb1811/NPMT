@@ -1,15 +1,27 @@
 function ViewEditor() {
 
-    function addNodeToList(newMarker) {
+    function addNodeToList(node) {
         var $nodeLsit = $('.node-list');
+        var hoverIcon = L.icon({
+            iconUrl: '/static/leaflet/images/marker-icon-yellow.png',
+            shadowUrl: '/static/leaflet/images/marker-shadow.png'
+        }), defaultIcon = L.icon({
+            iconUrl: '/static/leaflet/images/marker-icon.png',
+            shadowUrl: '/static/leaflet/images/marker-shadow.png'
+        });
         var view = {
-            lat: newMarker.getLatLng().lat.toString(),
-            lng: newMarker.getLatLng().lng.toString()
+            lat: node.getLatLng().lat.toString(),
+            lng: node.getLatLng().lng.toString()
         };
         var output = Mustache.render(network_editor.templates.node, view);
         var nodeEl = $(output);
+        nodeEl.hover(function () {
+            node.setIcon(hoverIcon);
+        }, function () {
+            node.setIcon(defaultIcon);
+        });
         nodeEl.find('.delete-node').on('click', function (e) {
-            newMarker.remove();
+            node.remove();
             $(this).parent('li').remove();
         });
         $nodeLsit.append(nodeEl);
@@ -26,6 +38,13 @@ function ViewEditor() {
         };
         var output = Mustache.render(network_editor.templates.edge, view);
         var edgeEl = $(output);
+
+        edgeEl.hover(function () {
+            edge.setStyle({color: 'black'});
+        }, function () {
+            edge.setStyle({color: 'red'})
+        });
+
         edgeEl.find('.delete-edge').on('click', function (e) {
             edge.remove();
             $(this).parent('li').remove();
@@ -69,6 +88,7 @@ function ViewEditor() {
         $('.network-name').val(name);
         $('.network-description').val(description);
     }
+
     return {
         addNodeToList: addNodeToList,
         createNetworkTable: createNetworkTable,
