@@ -30,19 +30,15 @@
         </div>
 
         <div class="col-sm-9" id="content">
-            <div>
+            <div class="col-sm-9">
                 <label for="name">Name:</label> <input class='network-name' type="text" value=""
                                                        placeholder="Enter network name">
                 <label for="name">description:</label> <input class='network-description' type="text" value=""
                                                               placeholder="Enter short description">
-            </div>
-
-
-            <div class="well well-lg map-container" id="map">
 
             </div>
 
-            <div>
+            <div class="col-sm-3">
                 <form id="network-form" action='#' class="inline-block" data-id="{{ network_id }}"
                       data-save-url="{% url 'network_editor:save' %}"
                       data-update-url="{% url 'network_editor:update' %}" method="post">
@@ -56,6 +52,12 @@
                 </button>
 
             </div>
+
+            <div class="col-sm-12 well well-lg map-container" id="map">
+
+            </div>
+
+
         </div>
     </div>
 
