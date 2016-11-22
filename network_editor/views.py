@@ -29,7 +29,6 @@ def load(request):
 
 
 def edit(request, network_id):
-    network_id = 48
     network = Network.objects.get(pk=network_id)
     edges = network.edge_set.all()
     network_json = serializers.serialize('json', [network], fields=('name', 'description'))
