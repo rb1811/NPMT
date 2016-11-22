@@ -157,6 +157,9 @@ function NetworkEditor() {
             setupAddingNodesAndEdges();
             bindSave();
             bindLoadNetworkModal();
+        },
+        getMap: function () {
+            return myMap;
         }
     }
 }
@@ -166,4 +169,10 @@ $(function () {
     var viewEditor = new ViewEditor();
     var networkEditor = new NetworkEditor();
     networkEditor.initMap(viewEditor);
+
+    if (window.network_editor.mode == 'edit') {
+        var networkLoader = new NetworkLoader();
+        networkLoader.init(viewEditor);
+        networkLoader.loadMap(networkEditor.getMap());
+    }
 });

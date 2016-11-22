@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
 from django.http import JsonResponse
+import HTMLParser
 from django.views.decorators.csrf import csrf_protect
 from django.core import serializers
 
@@ -25,3 +26,17 @@ def load(request):
     networks = serializers.serialize('json', networks, fields=('name', 'description'))
     data = {'networks': json.loads(networks)}
     return JsonResponse(data)
+
+
+def edit(request, network_id):
+    network_id = 48
+    network = Network.objects.get(pk=network_id)
+    edges = network.edge_set.all()
+    network_json = serializers.serialize('json', [network], fields=('name', 'description'))
+    edges_list = [
+        {'start_node': {'x': e.start_node.x, 'y': e.start_node.y}, 'end_node': {'x': e.end_node.x, 'y': e.end_node.y}}
+        for e in edges]
+    edges_json = json.dumps(edges_list)
+    network_json = HTMLParser.HTMLParser().unescape(network_json)
+    context = {'active_tab': 'network_editor','mode': 'edit' ,'network': network_json, 'edges': edges_json}
+    return render(request, 'network_editor/index.html', context)

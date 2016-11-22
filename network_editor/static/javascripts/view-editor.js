@@ -63,9 +63,14 @@ function ViewEditor() {
         });
     }
 
+    function setNetworkDetails(name, description) {
+        $('.network-name').val(name);
+        $('.network-description').val(description);
+    }
     return {
         addNodeToList: addNodeToList,
         createNetworkTable: createNetworkTable,
-        addEdge: addEdge
+        addEdge: addEdge,
+        setNetworkDetails: setNetworkDetails
     }
 }

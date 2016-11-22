@@ -30,16 +30,18 @@
         </div>
 
         <div class="col-sm-9" id="content">
-
             <div>
-                <label for="name">Name:</label> <input class='network-name' type="text" value="{{ network }}"
+                <label for="name">Name:</label> <input class='network-name' type="text" value=""
                                                        placeholder="Enter network name">
                 <label for="name">description:</label> <input class='network-description' type="text" value=""
                                                               placeholder="Enter short description">
             </div>
+
+
             <div class="well well-lg map-container" id="map">
 
             </div>
+
             <div>
                 <form id="network-form" action='#' class="inline-block" data-url="{% url 'network_editor:save' %}"
                       method="post">
@@ -56,46 +58,17 @@
         </div>
     </div>
 
+    <script type="text/javascript">
+
+        window.network_editor = window.network_editor ? window.network_editor : {};
+
+        window.network_editor.mode = '{{ mode }}';
+        window.network_editor.network = '{{ network }}';
+        window.network_editor.edges = '{{ edges }}';
+    </script>
     <!-- Modal -->
-    <div class="modal fade" id="load-network-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         data-url="{% url 'network_editor:load' %}">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Load Network</h4>
-                </div>
-                <div class="modal-body">
-                    <table id="networks-table" class="table table-hover">
-                        <caption>Stored Networks:</caption>
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>selection</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Network 1</td>
-                            <td>Test Description</td>
-                            <td>
-                                <input type="radio" name="optionsNetwork" id="network-id-1" value="48" checked>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Submit</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include 'network_editor/network_modal.html' %}
+    {% block network_modal %}{% endblock %}
 
 
 {% endblock %}
