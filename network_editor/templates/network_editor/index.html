@@ -47,12 +47,12 @@
                       data-save-url="{% url 'network_editor:save' %}"
                       data-update-url="{% url 'network_editor:update' %}" method="post">
                     {% csrf_token %}
-                    <input type="submit" class="btn btn-sm btn-default" value="Save"/>
+                    <input type="submit" class="btn btn-sm btn-success" value="Save"/>
                 </form>
 
                 <button type="button" id="load-networks" class="btn btn-primary btn-sm" data-toggle="modal"
                         data-target="#load-network-modal">
-                    load
+                    Load
                 </button>
 
             </div>
