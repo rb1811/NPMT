@@ -5,74 +5,12 @@ function NetworkEditor() {
     var edgeStartNodeAlreadySet = false;
     var startIcon = null;
     var defaultIcon = null;
-
-    var nodeTemplate = network_editor.templates.node;
-
-    function createNetworkTable(networks) {
-        networks.forEach(function (network, index) {
-            var view = {
-                    index: index+1,
-                    id: network.pk,
-                    name: network.fields.name,
-                    description: network.fields.description
-                },
-                template = network_editor.templates.network;
-            var output = Mustache.render(template, view);
-            var networkRowEl = $(output);
-            $('#networks-table').find('tbody').append(networkRowEl);
-        });
-    }
+    var viewEditor;
 
     function showNodeDetail(popup, newMarker) {
         popup.setLatLng(newMarker.getLatLng())
             .setContent(getNodeTemplate(newMarker.getLatLng()))
             .openOn(myMap);
-    }
-
-    function addEdgeToList(start, end, edge) {
-        var $edgeLsit = $('.edge-list');
-        var view = {
-            startLat: start.getLatLng().lat,
-            startLng: start.getLatLng().lng,
-            endLat: end.getLatLng().lat,
-            endLng: end.getLatLng().lng
-        };
-        var output = Mustache.render(network_editor.templates.edge, view);
-        var edgeEl = $(output);
-        edgeEl.find('.delete-edge').on('click', function (e) {
-            edge.remove();
-            $(this).parent('li').remove();
-        });
-        $edgeLsit.append(edgeEl);
-    }
-
-    function addEdge(startNode, newMarker) {
-        edgeStartNodeAlreadySet = false;
-        startNode.setIcon(defaultIcon);
-        if (startNode != newMarker) {
-            var latlngs = [
-                [startNode.getLatLng().lat, startNode.getLatLng().lng],
-                [newMarker.getLatLng().lat, newMarker.getLatLng().lng]
-            ];
-            var polyline = L.polyline(latlngs, {color: 'red'});
-            polyline.addTo(myMap);
-            addEdgeToList(startNode, newMarker, polyline);
-        }
-    }
-
-    function addNodeToList(newMarker) {
-        var $nodeLsit = $('.node-list');
-        var view = {
-            lat: newMarker.getLatLng().lat.toString(),
-            lng: newMarker.getLatLng().lng.toString()
-        };
-        var output = Mustache.render(network_editor.templates.node, view);
-        var nodeEl = $(output);
-        nodeEl.find('.delete-node').on('click', function (e) {
-            newMarker.remove();
-            $(this).parent('li').remove();
-        });
-        $nodeLsit.append(nodeEl);
     }
 
     var getNetworkDataJson = function () {
@@ -153,11 +91,11 @@ function NetworkEditor() {
                                 newMarker.setIcon(startIcon);
                                 startNode = newMarker;
                             } else {
-                                addEdge(startNode, newMarker);
+                                edgeStartNodeAlreadySet = viewEditor.addEdge(myMap, startNode, newMarker, defaultIcon);
                             }
                         }
                     });
-                    addNodeToList(newMarker);
+                    viewEditor.addNodeToList(newMarker);
                 }
             });
         },
@@ -169,7 +107,7 @@ function NetworkEditor() {
                     type: 'get',
                     url: url,
                     success: function (data) {
-                        createNetworkTable(data.networks);
+                        viewEditor.createNetworkTable(data.networks);
                     }
                 });
             });
@@ -206,16 +144,18 @@ function NetworkEditor() {
                 return false;
             });
         };
+
+    function setViewEditor(vEditor) {
+        viewEditor = vEditor;
+    }
+
     return {
-        initMap: function () {
+        initMap: function (viewEditor) {
+            setViewEditor(viewEditor);
             setupMap();
             initBindings();
             setupAddingNodesAndEdges();
-        },
-        setOnSave: function () {
             bindSave();
-        },
-        bindLoadNetworkModal: function () {
             bindLoadNetworkModal();
         }
     }
@@ -223,8 +163,7 @@ function NetworkEditor() {
 
 
 $(function () {
+    var viewEditor = new ViewEditor();
     var networkEditor = new NetworkEditor();
-    networkEditor.initMap();
-    networkEditor.setOnSave();
-    networkEditor.bindLoadNetworkModal();
+    networkEditor.initMap(viewEditor);
 });
