@@ -71,7 +71,7 @@ class Network(models.Model):
         network = cls(name=name, description=description)
         network.save()
         network.add_nodes_and_edges(edges=edges, nodes=nodes)
-
+        return network
 
 class Edge(models.Model):
     network = models.ForeignKey(Network, on_delete=models.CASCADE)

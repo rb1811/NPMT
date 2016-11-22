@@ -107,10 +107,17 @@ function NetworkLoader() {
         nodeEditor = nEditor;
     }
 
+    function setNetworkIdData() {
+        var href = window.location.pathname;
+        var nId = href.substr(href.lastIndexOf('/') + 1);
+        $('#network-form').data('id', nId);
+    }
+
     return {
         init: function (vEditor, nEditor) {
             setViewEditor(vEditor);
             setNodeEditor(nEditor);
+            setNetworkIdData();
         },
         loadMap: function (myMap) {
             setMap(myMap);

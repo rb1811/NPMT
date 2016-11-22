@@ -1,6 +1,7 @@
 import json
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import HTMLParser
 from django.views.decorators.csrf import csrf_protect
@@ -17,8 +18,10 @@ def index(request):
 @csrf_protect
 def save(request):
     network = json.loads(request.body)
-    Network.create_from_nodes_and_edges(network['name'], network['description'], network['nodes'], network['edges'])
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    network = Network.create_from_nodes_and_edges(network['name'], network['description'], network['nodes'], network['edges'])
+    url = reverse('network_editor:edit', args=[network.id])
+    response = {'status': 1, 'message': "Network saved", 'redirect_url': url}
+    return JsonResponse(response)
 
 
 def load(request):

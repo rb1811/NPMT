@@ -32,6 +32,9 @@ function NetworkEditor() {
         var description = $('input.network-description').val();
         var id = $('#network-form').data('id');
 
+        name = name == "" ? "temp" : name;
+        description = description == "" ? "temp description" : description;
+
         return JSON.stringify({
             id: id,
             name: name,
@@ -167,7 +170,10 @@ function NetworkEditor() {
                     url: url,
                     data: getNetworkDataJson(),
                     success: function (data) {
-                        console.log("returned successfully: ", data);
+                        if (data.status == 1) {
+                            alert(data.message);
+                            window.location = data.redirect_url
+                        }
                     }
                 });
 
