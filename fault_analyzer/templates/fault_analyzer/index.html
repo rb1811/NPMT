@@ -1,14 +1,100 @@
 {% extends "fault_analyzer/base.html" %}
 
-
-
-{% block title %}Network Editor{% endblock %}
+{% block title %}Fault Analyzer{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col-sm-3" id="sidebar">
             {% block sidebar %}
-                <h1>Sidebar</h1>
+                <div>
+                    <h4>Fault Editor</h4>
+                    <div class="panel-group" id="fault-accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                       href="#generic-faults-collapse"
+                                       aria-expanded="true" aria-controls="generic-faults-collapse">
+                                        Generic Faults
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="generic-faults-collapse" class="panel-collapse collapse in" role="tabpanel"
+                                 aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    <div class="row row-space">
+                                        <div class="col-sm-12">
+                                            <div class="input-group fault-radius-container">
+                                                <span class="input-group-addon">Radius</span>
+                                                <input type="text" class="form-control fault-radius" value="400"
+                                                       aria-label="fault radius">
+                                                <span class="input-group-addon">km</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-space">
+                                        <div class="col-sm-12">
+                                            <button class="btn btn-default">Analyze Network</button>
+                                        </div>
+                                    </div>
+                                    <div class="row row-space">
+                                        <div class="col-sm-12">
+                                            <div class="panel panel-default">
+                                                <!-- Default panel contents -->
+                                                <div class="panel-heading"><h5>Fault analysis</h5></div>
+                                                <div class="panel-body">
+                                                    RBCDN Faults:
+                                                </div>
+
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Latitude</th>
+                                                        <th>Longitude</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                        <td><span class="text-overflow">1.00000</span></td>
+                                                        <td><span class="text-overflow">3.00000</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">2</th>
+                                                        <td><span class="text-overflow">2.00000</span></td>
+                                                        <td><span class="text-overflow">4.00000</span></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="well well-sm">
+                                                    <ul class="list-group">
+                                                        <li class="list-group-item">
+                                                            <span class="badge">2</span>
+                                                            Composition deposition number:
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span class="badge">1</span>
+                                                            Largest Component Size:
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span class="badge">3</span>
+                                                            Smallest Component Size:
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span class="badge">2</span>
+                                                            Fault Regions Considered:
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endblock %}
         </div>
 
@@ -24,7 +110,7 @@
             <div class="col-sm-3">
                 <button type="button" id="load-networks" class="btn btn-primary btn-sm" data-toggle="modal"
                         data-target="#load-network-modal">
-                    Load
+                    Change Network
                 </button>
 
             </div>
