@@ -18,7 +18,8 @@ def index(request):
 @csrf_protect
 def save(request):
     network = json.loads(request.body)
-    network = Network.create_from_nodes_and_edges(network['name'], network['description'], network['nodes'], network['edges'])
+    network = Network.create_from_nodes_and_edges(network['name'], network['description'], network['nodes'],
+                                                  network['edges'])
     url = reverse('network_editor:edit', args=[network.id])
     response = {'status': 1, 'message': "Network saved", 'redirect_url': url}
     return JsonResponse(response)

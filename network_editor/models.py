@@ -40,7 +40,10 @@ class Network(models.Model):
         self.save()
 
     def delete_edges(self):
-        [e.delete() for e in self.edge_set.all()]
+        try:
+            [e.delete() for e in self.edge_set.all()]
+        except Exception as e:
+            print('%s (%s)' % (e.message, type(e)))
 
     def add_nodes_and_edges(self, edges, nodes):
         for node in nodes:
@@ -72,6 +75,7 @@ class Network(models.Model):
         network.save()
         network.add_nodes_and_edges(edges=edges, nodes=nodes)
         return network
+
 
 class Edge(models.Model):
     network = models.ForeignKey(Network, on_delete=models.CASCADE)

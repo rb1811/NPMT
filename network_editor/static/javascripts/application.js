@@ -107,22 +107,6 @@ function NetworkEditor() {
                 if (mode == modes.add_node) {
                     var newMarker = new L.marker(e.latlng).addTo(myMap);
                     addNode(newMarker);
-                    // var popup = L.popup();
-
-                    // newMarker.on('click', function (e) {
-                    //     if (mode == modes.add_node) {
-                    //         showNodeDetail(popup, newMarker);
-                    //     } else if (mode == modes.add_edge) {
-                    //         if (edgeStartNodeAlreadySet == false) {
-                    //             edgeStartNodeAlreadySet = true;
-                    //             newMarker.setIcon(startIcon);
-                    //             startNode = newMarker;
-                    //         } else {
-                    //             edgeStartNodeAlreadySet = viewEditor.addEdge(myMap, startNode, newMarker, defaultIcon);
-                    //         }
-                    //     }
-                    // });
-                    // viewEditor.addNodeToList(newMarker);
                 }
             });
         },
@@ -217,4 +201,5 @@ $(function () {
         networkLoader.init(viewEditor, networkEditor);
         networkLoader.loadMap(networkEditor.getMap());
     }
+    Util.enablePopover();
 });

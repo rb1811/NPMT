@@ -1,9 +1,22 @@
-window.network_editor = window.network_editor ? window.network_editor : {}
+window.network_editor = window.network_editor ? window.network_editor : {};
 window.network_editor.templates = {
     node: '<li data-lat="{{lat}}" data-lng="{{lng}}" class="list-group-item node-list-item clearfix">' +
     '<p>Lat: <span class="node-lat truncate">{{lat}}</span></p>' +
     '<p>Long: <span class="node-lng truncate">{{lng}}</span></p>' +
     '<input type="button" value="Delete" class="btn btn-xs btn-danger delete-node pull-right"/> ' +
+    "<button type='button' class='edit-node btn btn-xs btn-default'  data-trigger='focus' data-container='body' " +
+    "data-toggle='popover'" +
+    "data-placement='right' data-html='true' title='Edit node' " +
+    "data-content=\"<div class='row'><div class='col-xs-12'>" +
+    "<label for='edit-lat'>lat: <input name='edit-lat' class='edit-lat' type='text' value=''></label>" +
+    "</div><div class='col-xs-12'>" +
+    "<label for='edit-lng'>lng: <input name='edit-lat' class='edit-lng' type='text' value=''></label></div>" +
+    "<div class='col-xs-12 text-center'>" +
+    "<button class='update-node' class='center btn btn-sm btn-default'>update</button>" +
+    "</div>" +
+    "</div>\">" +
+    "edit" +
+    "</button>" +
     '</li>',
 
     edge: '<li data-start-lat="{{startLat}}" data-start-lng="{{startLng}}" ' +

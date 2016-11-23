@@ -28,6 +28,13 @@ var Util = {
         // If we made it this far, objects
         // are considered equivalent
         return true;
+    },
+    enablePopover: function () {
+        // $('[data-toggle="popover"]').popover();
+
+        $('body').popover({
+          selector: '[data-toggle="popover"]'
+        });
     }
 };
 

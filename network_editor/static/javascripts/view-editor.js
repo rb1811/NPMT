@@ -1,7 +1,7 @@
 function ViewEditor() {
 
     function addNodeToList(node) {
-        var $nodeLsit = $('.node-list');
+        var $nodeList = $('.node-list');
         var hoverIcon = L.icon({
             iconUrl: '/static/leaflet/images/marker-icon-yellow.png',
             shadowUrl: '/static/leaflet/images/marker-shadow.png'
@@ -20,11 +20,29 @@ function ViewEditor() {
         }, function () {
             node.setIcon(defaultIcon);
         });
+
+        var editNode = nodeEl.find('.edit-node');
+        editNode.on('shown.bs.popover', function (e) {
+            var $editLatInput = $('input.edit-lat');
+            var $editLngInput = $('input.edit-lng');
+            $editLatInput.val(nodeEl.data('lat'));
+            $editLngInput.val(nodeEl.data('lng'));
+            $('button.update-node').on('click', function () {
+                var latVal = $editLatInput.val();
+                var lngVal = $editLngInput.val();
+                nodeEl.attr('data-lat', latVal);
+                nodeEl.attr('data-lng', lngVal);
+                nodeEl.find('.node-lat').text(latVal);
+                nodeEl.find('.node-lng').text(lngVal);
+                editNode.popover('hide')
+                node.setLatLng({lat: latVal, lng: lngVal});
+            });
+        });
         nodeEl.find('.delete-node').on('click', function (e) {
             node.remove();
             $(this).parent('li').remove();
         });
-        $nodeLsit.append(nodeEl);
+        $nodeList.append(nodeEl);
     }
 
 
@@ -68,8 +86,9 @@ function ViewEditor() {
     }
 
     function createNetworkTable(networks) {
+        var $networks = $('#networks-table');
+        $networks.find('tbody').html('');
         networks.forEach(function (network, index) {
-            var $networks = $('#networks-table');
             var view = {
                     index: index + 1,
                     id: network.pk,
