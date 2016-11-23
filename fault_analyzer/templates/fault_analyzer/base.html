@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    {% load compile_static %}
+    {% load static %}
+
+
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+
+    <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}"/>
+    <link rel="stylesheet" href="{% static 'sass/application.scss'|compile %}"/>
+
+    <title>{% block title %}NPMT{% endblock %}</title>
+</head>
+
+<body class="fault_analyzer">
+
+{% include "network_editor/header.html" %}
+
+{% block header %}
+{% endblock %}
+
+<div class="container-fluid base-container">
+    {% block content %}{% endblock %}
+</div>
+
+<script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'javascripts/lib/js.cookie.js' %}"></script>
+<script type="text/javascript" src="{% static 'javascripts/lib/mustache.js' %}"></script>
+<script type="text/javascript" src="{% static 'javascripts/mustache-templates.js' %}"></script>
+{% bootstrap_javascript %}
+<script type="text/javascript" src="{% static 'leaflet/leaflet.js' %}"></script>
+<script type="text/javascript" src="{% static 'leaflet/mercatorConverter.js' %}"></script>
+<script type="text/javascript" src="{% static 'leaflet/leafletembed.js' %}"></script>
+{#<script type="text/javascript" src="{% static 'javascripts/view-editor.js' %}"></script>#}
+{#<script type="text/javascript" src="{% static 'javascripts/network-loader.js' %}"></script>#}
+{#<script type="text/javascript" src="{% static 'javascripts/application.js' %}"></script>#}
+</body>
+</html>

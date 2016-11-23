@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', lambda r: HttpResponseRedirect('network_editor/'), name='home'),
     url(r'^network_editor/', include('network_editor.urls', namespace="network_editor")),
+    url(r'^fault_analyzer/', include('fault_analyzer.urls', namespace="fault_analyzer")),
 ]

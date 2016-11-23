@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'static_precompiler',
     'network_editor.apps.NetworkEditorConfig',
+    'fault_analyzer.apps.FaultAnalyzerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

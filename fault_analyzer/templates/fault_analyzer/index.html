@@ -1,0 +1,59 @@
+{% extends "fault_analyzer/base.html" %}
+
+
+
+{% block title %}Fault Analyzer{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3" id="sidebar">
+            {% block sidebar %}
+
+            {% endblock %}
+        </div>
+
+        <div class="col-sm-9" id="content">
+            <div class="col-sm-9">
+                <label for="name">Name:</label> <input class='network-name' type="text" value=""
+                                                       placeholder="Enter network name">
+                <label for="name">description:</label> <input class='network-description' type="text" value=""
+                                                              placeholder="Enter short description">
+
+            </div>
+
+            <div class="col-sm-3">
+                <form id="network-form" action='#' class="inline-block" data-id="{{ network_id }}"
+                      data-save-url="{% url 'network_editor:save' %}"
+                      data-update-url="{% url 'network_editor:update' %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-sm btn-success" value="Save"/>
+                </form>
+
+                <button type="button" id="load-networks" class="btn btn-primary btn-sm" data-toggle="modal"
+                        data-target="#load-network-modal">
+                    Load
+                </button>
+
+            </div>
+
+            <div class="col-sm-12 well well-lg map-container" id="map">
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        window.network_editor = window.network_editor ? window.network_editor : {};
+        window.network_editor.mode = '{{ mode }}';
+        window.network_editor.network = '{{ network }}';
+        window.network_editor.edges = '{{ edges }}';
+    </script>
+    <!-- Modal -->
+    {% include 'network_editor/network_modal.html' %}
+    {% block network_modal %}{% endblock %}
+
+
+{% endblock %}
