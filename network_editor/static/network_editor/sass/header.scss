@@ -15,10 +15,18 @@
     li {
       a {
         color: white;
+        &:hover {
+          color: white;
+          background-color: rgba(28, 64, 72, 0.81);
+        }
       }
       &.active a {
-        background-color: #1c4048;
         color: white;
+        background-color: #2b5f6b;
+        &:hover {
+          color: white;
+          background-color: #2b5f6b;
+        }
       }
     }
   }
