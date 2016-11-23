@@ -15,7 +15,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = '3$-uhne*wq6c#8o=28bi-p5smcq_))g3bd3cj1wym)a@dkbq-m'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -58,9 +56,8 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'npmtapp.urls'
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR,'templates').replace('\\','/'),
+    os.path.join(BASE_DIR, 'templates').replace('\\', '/'),
 )
-
 
 TEMPLATES = [
     {
@@ -80,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'npmtapp.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -95,7 +91,6 @@ DATABASES = {
     }
 }
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -109,7 +104,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
@@ -118,8 +112,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
+    'static_precompiler.finders.StaticPrecompilerFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # other finders..
-    'static_precompiler.finders.StaticPrecompilerFinder',
-)
 
+)

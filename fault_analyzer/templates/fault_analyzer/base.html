@@ -9,8 +9,8 @@
     {% load bootstrap3 %}
     {% bootstrap_css %}
 
-    <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}"/>
-    <link rel="stylesheet" href="{% static 'sass/application.scss'|compile %}"/>
+    <link rel="stylesheet" href="{% static 'network_editor/leaflet/leaflet.css' %}"/>
+    <link rel="stylesheet" href="{% static 'network_editor/sass/application.scss'|compile %}"/>
 
     <title>{% block title %}NPMT{% endblock %}</title>
 </head>
@@ -27,15 +27,15 @@
 </div>
 
 <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}"></script>
-<script type="text/javascript" src="{% static 'javascripts/lib/js.cookie.js' %}"></script>
-<script type="text/javascript" src="{% static 'javascripts/lib/mustache.js' %}"></script>
-<script type="text/javascript" src="{% static 'javascripts/mustache-templates.js' %}"></script>
+<script type="text/javascript" src="{% static 'network_editor/javascripts/lib/js.cookie.js' %}"></script>
+<script type="text/javascript" src="{% static 'network_editor/javascripts/lib/mustache.js' %}"></script>
+<script type="text/javascript" src="{% static 'network_editor/javascripts/mustache-templates.js' %}"></script>
 {% bootstrap_javascript %}
-<script type="text/javascript" src="{% static 'leaflet/leaflet.js' %}"></script>
-<script type="text/javascript" src="{% static 'leaflet/mercatorConverter.js' %}"></script>
-<script type="text/javascript" src="{% static 'leaflet/leafletembed.js' %}"></script>
+<script type="text/javascript" src="{% static 'network_editor/leaflet/leaflet.js' %}"></script>
+<script type="text/javascript" src="{% static 'network_editor/leaflet/mercatorConverter.js' %}"></script>
+<script type="text/javascript" src="{% static 'network_editor/leaflet/leafletembed.js' %}"></script>
 {#<script type="text/javascript" src="{% static 'javascripts/view-editor.js' %}"></script>#}
-{#<script type="text/javascript" src="{% static 'javascripts/network-loader.js' %}"></script>#}
-{#<script type="text/javascript" src="{% static 'javascripts/application.js' %}"></script>#}
+<script type="text/javascript" src="{% static 'fault_analyzer/javascripts/network-loader.js' %}"></script>
+<script type="text/javascript" src="{% static 'fault_analyzer/javascripts/application.js' %}"></script>
 </body>
 </html>

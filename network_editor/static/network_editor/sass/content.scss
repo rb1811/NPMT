@@ -1,12 +1,14 @@
-.network-editor {
-  #content {
-    background-color: white;
-    padding-top: 10px;
-    .map-container {
-      margin-top: 10px;
-      height: 500px;
-    }
+
+#content {
+  background-color: white;
+  padding-top: 10px;
+  .map-container {
+    margin-top: 10px;
+    height: 500px;
   }
+}
+
+.network-editor {
 
   .node-list {
     .node-list-item {

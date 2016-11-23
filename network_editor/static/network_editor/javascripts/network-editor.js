@@ -44,11 +44,11 @@ function NetworkEditor() {
         });
     };
     var setupMap = function () {
-            myMap = L.map('map').setView([38.487, -75.641], 8);
+            myMap = L.map('map');
             var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
             var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
             var osm = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 18, attribution: osmAttrib});
-            myMap.setView(new L.LatLng(33.428242, -111.598434), 5);
+            myMap.setView(new L.LatLng(30, 0), 2);
             myMap.addLayer(osm);
             startIcon = L.icon({
                 iconUrl: '/static/leaflet/images/marker-icon-orange.png',
@@ -84,7 +84,6 @@ function NetworkEditor() {
         },
 
         addNode = function (node) {
-            viewEditor.addNodeToList(node);
             var popup = L.popup();
             node.on('click', function (e) {
                 if (mode == modes.add_node) {
@@ -106,6 +105,7 @@ function NetworkEditor() {
             myMap.on('click', function (e) {
                 if (mode == modes.add_node) {
                     var newMarker = new L.marker(e.latlng).addTo(myMap);
+                    viewEditor.addNodeToList(newMarker);
                     addNode(newMarker);
                 }
             });
@@ -189,17 +189,3 @@ function NetworkEditor() {
         addNode: addNode
     }
 }
-
-
-$(function () {
-    var viewEditor = new ViewEditor();
-    var networkEditor = new NetworkEditor();
-    networkEditor.initMap(viewEditor);
-
-    if (window.network_editor.mode == 'edit') {
-        var networkLoader = new NetworkLoader();
-        networkLoader.init(viewEditor, networkEditor);
-        networkLoader.loadMap(networkEditor.getMap());
-    }
-    Util.enablePopover();
-});
