@@ -19,6 +19,6 @@ from django.http import HttpResponseRedirect
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', lambda r: HttpResponseRedirect('network_editor/')),
+    url(r'^$', lambda r: HttpResponseRedirect('network_editor/'), name='home'),
     url(r'^network_editor/', include('network_editor.urls', namespace="network_editor")),
 ]
