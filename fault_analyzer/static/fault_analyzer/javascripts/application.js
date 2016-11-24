@@ -1,3 +1,5 @@
 $(function () {
-   console.log(" This application loaded");
+   var viewEditor = new ViewEditor();
+   var networkLoader = new NetworkLoader();
+   networkLoader.init(viewEditor);
 });

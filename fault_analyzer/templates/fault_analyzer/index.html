@@ -129,12 +129,12 @@
     <script type="text/javascript">
 
         window.network_editor = window.network_editor ? window.network_editor : {};
-        window.network_editor.mode = '{{ mode }}';
         window.network_editor.network = '{{ network }}';
         window.network_editor.edges = '{{ edges }}';
+        window.network_editor.nodes = '{{ edges }}';
     </script>
     <!-- Modal -->
-    {% include 'network_editor/network_modal.html' %}
+    {% include 'fault_analyzer/network_modal.html' %}
     {% block network_modal %}{% endblock %}
 
 
