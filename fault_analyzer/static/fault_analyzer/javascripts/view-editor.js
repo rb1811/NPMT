@@ -18,8 +18,8 @@ function ViewEditor() {
     }
 
     function setNetworkDetails(name, description) {
-        $('.network-name').val(name);
-        $('.network-description').val(description);
+        $('.network-name').text(name);
+        $('.network-description').text(description);
     }
 
     function addEdge(myMap, startNode, endNode) {

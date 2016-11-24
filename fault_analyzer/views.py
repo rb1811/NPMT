@@ -1,5 +1,8 @@
 from django.core import serializers
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_protect
+
 import json
 import HTMLParser
 
@@ -39,3 +42,11 @@ def edit(request, network_id):
                'edges': edges_json,
                'network_id': network_id}
     return render(request, 'fault_analyzer/index.html', context)
+
+
+@csrf_protect
+def analyze(request):
+    data = json.loads(request.body)
+    results = {}
+    response = {'status': 1, 'message': "Network Analyzed", 'results': results}
+    return JsonResponse(response)

@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-sm-3" id="sidebar">
+        <div class="col-sm-3 col-xs-4" id="sidebar">
             {% block sidebar %}
                 <div>
                     <h4>Fault Editor</h4>
@@ -25,19 +25,23 @@
                                  aria-labelledby="headingOne">
                                 <div class="panel-body">
                                     <div class="row row-space">
-                                        <div class="col-sm-12">
-                                            <div class="input-group fault-radius-container">
-                                                <span class="input-group-addon">Radius</span>
-                                                <input type="text" class="form-control fault-radius" value="400"
-                                                       aria-label="fault radius">
-                                                <span class="input-group-addon">km</span>
+                                        <form id="analyze-form" action='#' data-url="{% url 'fault_analyzer:analyze' %}"
+                                              class="inline-block" data-id="{{ network_id }}" method="post">
+                                            {% csrf_token %}
+                                            <div class="col-sm-12 row-space">
+                                                <div class="input-group fault-radius-container">
+                                                    <span class="input-group-addon">Radius</span>
+                                                    <input type="text" class="form-control fault-radius" value="400"
+                                                           aria-label="fault radius">
+                                                    <span class="input-group-addon">km</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row row-space">
-                                        <div class="col-sm-12 text-center">
-                                            <button class="btn btn-primary">Analyze Network</button>
-                                        </div>
+                                            <div class="col-sm-12 text-center">
+                                                <button id="analyze-network" type="submit"
+                                                        class="btn btn-primary">Analyze Network
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                     <div class="row row-space">
                                         <div class="col-sm-12">
@@ -101,12 +105,19 @@
             {% endblock %}
         </div>
 
-        <div class="col-sm-9" id="content">
+        <div class="col-sm-9 col-xs-8" id="content">
             <div class="col-sm-7">
-                <label for="name">Name:</label> <input class='network-name' type="text" value=""
-                                                       placeholder="Enter network name">
-                <label for="name">description:</label> <input class='network-description' type="text" value=""
-                                                              placeholder="Enter short description">
+                <div class="col-sm-5">
+                    <label for="name">Name:</label>
+                    <p class='network-name inline-block' type="text"
+                       placeholder="Enter network name"></p>
+                </div>
+                <div class="col-sm-6">
+
+                    <label for="name">description:</label>
+                    <p class='network-description inline-block' type="text" value=""
+                       placeholder="Enter short description"></p>
+                </div>
 
             </div>
 
@@ -131,6 +142,7 @@
         window.network_editor = window.network_editor ? window.network_editor : {};
         window.network_editor.mode = '{{ mode }}';
         window.network_editor.network = '{{ network }}';
+        window.network_editor.network_id = '{{ network_id }}';
         window.network_editor.edges = '{{ edges }}';
         window.network_editor.nodes = '{{ nodes }}';
     </script>
