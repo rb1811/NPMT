@@ -70,6 +70,12 @@ function NetworkLoader() {
         return nodeSet;
     }
 
+    function getNodeTemplate(node) {
+        return "<h4>Node Details:</h4>" +
+            "<p> Lat: <span > " + node.lat + " </span></p>" +
+            "<p> Long: <span >" + node.lng + "  </span ></p>";
+    }
+
     function showNodeDetail(popup, nodeMarker) {
         popup.setLatLng(nodeMarker.getLatLng())
             .setContent(getNodeTemplate(nodeMarker.getLatLng()))
@@ -115,6 +121,9 @@ function NetworkLoader() {
             initMap();
             bindLoadNetworkModal();
         },
-        loadNetwork: loadNetwork
+        loadNetwork: loadNetwork,
+        getMap: function () {
+            return myMap;
+        }
     }
 }

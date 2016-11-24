@@ -4,5 +4,5 @@ $(function () {
     networkLoader.init(viewEditor);
     networkLoader.loadNetwork();
     var faultAnalyzer = new FaultAnalyzer();
-    faultAnalyzer.init();
+    faultAnalyzer.init(networkLoader.getMap());
 });

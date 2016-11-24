@@ -1,4 +1,6 @@
 function FaultAnalyzer() {
+    var myMap;
+
     function setupAjaxForCSRF() {
         var csrfSafeMethod = function (method) {
             // these HTTP methods do not require CSRF protection
@@ -11,6 +13,22 @@ function FaultAnalyzer() {
                     var csrftoken = Cookies.get('csrftoken');
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 }
+            }
+        });
+    }
+
+    function setupFaultTableBindings(faultRadius) {
+        var circle;
+        $('table.fault-table').find('tbody tr').on('click', function () {
+            var self = $(this);
+            if (self.attr('data-selected') == 'true') {
+                self.attr('data-selected', 'false');
+                circle.remove();
+            } else {
+                self.attr('data-selected', 'true');
+                var lat = self.find(".lat").text(),
+                    lng = self.find(".lng").text();
+                circle = new L.circle([lat, lng], {radius: faultRadius}).addTo(myMap);
             }
         });
     }
@@ -31,6 +49,7 @@ function FaultAnalyzer() {
                 success: function (data) {
                     if (data.status == 1) {
                         alert(data.message);
+                        setupFaultTableBindings(faultRadius);
                         console.log(data.results);
                     }
                 }
@@ -42,7 +61,8 @@ function FaultAnalyzer() {
     }
 
     return {
-        init: function () {
+        init: function (map) {
+            myMap = map;
             setupTrigger();
         }
     }
