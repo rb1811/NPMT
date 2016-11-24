@@ -51,12 +51,12 @@ function NetworkEditor() {
             myMap.setView(new L.LatLng(30, 0), 2);
             myMap.addLayer(osm);
             startIcon = L.icon({
-                iconUrl: '/static/leaflet/images/marker-icon-orange.png',
-                shadowUrl: '/static/leaflet/images/marker-shadow.png'
+                iconUrl: '/static/network_editor/leaflet/images/marker-icon-orange.png',
+                shadowUrl: '/static/network_editor/leaflet/images/marker-shadow.png'
             });
             defaultIcon = L.icon({
-                iconUrl: '/static/leaflet/images/marker-icon.png',
-                shadowUrl: '/static/leaflet/images/marker-shadow.png'
+                iconUrl: '/static/network_editor/leaflet/images/marker-icon.png',
+                shadowUrl: '/static/network_editor/leaflet/images/marker-shadow.png'
             });
         },
 

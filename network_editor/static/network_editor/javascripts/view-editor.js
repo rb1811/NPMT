@@ -3,11 +3,11 @@ function ViewEditor() {
     function addNodeToList(node) {
         var $nodeList = $('.node-list');
         var hoverIcon = L.icon({
-            iconUrl: '/static/leaflet/images/marker-icon-yellow.png',
-            shadowUrl: '/static/leaflet/images/marker-shadow.png'
+            iconUrl: '/static/network_editor/leaflet/images/marker-icon-yellow.png',
+            shadowUrl: '/static/network_editor/leaflet/images/marker-shadow.png'
         }), defaultIcon = L.icon({
-            iconUrl: '/static/leaflet/images/marker-icon.png',
-            shadowUrl: '/static/leaflet/images/marker-shadow.png'
+            iconUrl: '/static/network_editor/leaflet/images/marker-icon.png',
+            shadowUrl: '/static/network_editor/leaflet/images/marker-shadow.png'
         });
         var view = {
             lat: node.getLatLng().lat.toString(),

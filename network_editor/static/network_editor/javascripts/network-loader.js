@@ -1,9 +1,9 @@
 function NetworkLoader() {
 
-    var network, edges, myMap, viewEditor, nodeEditor, mode;
+    var network, nodes, edges, myMap, viewEditor, nodeEditor, mode;
     var defaultIcon = L.icon({
-        iconUrl: '/static/leaflet/images/marker-icon.png',
-        shadowUrl: '/static/leaflet/images/marker-shadow.png'
+        iconUrl: '/static/network_editor/leaflet/images/marker-icon.png',
+        shadowUrl: '/static/network_editor/leaflet/images/marker-shadow.png'
     });
 
     function readData() {
@@ -11,6 +11,8 @@ function NetworkLoader() {
         network = JSON.parse(decodedString);
         decodedString = Util.htmlDecode(window.network_editor.edges);
         edges = JSON.parse(decodedString);
+        decodedString = Util.htmlDecode(window.network_editor.nodes);
+        nodes = JSON.parse(decodedString);
     }
 
     function setMap(osmap) {
@@ -35,10 +37,8 @@ function NetworkLoader() {
         return returnVal;
     }
 
-    function addEdgesToMap() {
-        var nodeSet = [];
-        var mapNodes = [];
-        var startMarker, endMarker;
+    function plotEdges() {
+        var startMarker, endMarker, nodeSet = [];
         edges.forEach(function (edge) {
             var startNode = edge.start_node,
                 endNode = edge.end_node;
@@ -46,7 +46,6 @@ function NetworkLoader() {
             startMarker = new L.marker([startNode.x, startNode.y]);
             if (!nodeExists(nodeSet, startNode)) {
                 nodeSet.push(startNode);
-                mapNodes.push(startMarker);
                 startMarker.addTo(myMap);
                 viewEditor.addNodeToList(startMarker);
                 nodeEditor.addNode(startMarker);
@@ -54,20 +53,37 @@ function NetworkLoader() {
             endMarker = new L.marker([endNode.x, endNode.y]);
             if (!nodeExists(nodeSet, endNode)) {
                 nodeSet.push(endNode);
-                mapNodes.push(endMarker);
                 endMarker.addTo(myMap);
                 viewEditor.addNodeToList(endMarker);
                 nodeEditor.addNode(endMarker);
             }
-
             viewEditor.addEdge(myMap, startMarker, endMarker, defaultIcon);
+
         });
+        return nodeSet;
+    }
+
+    function plotNodes(nodeSet) {
+        nodes.forEach(function (node) {
+            if (!nodeExists(nodeSet, node)) {
+                var nodeMarker = new L.marker([node.x, node.y]);
+                nodeMarker.addTo(myMap);
+                viewEditor.addNodeToList(nodeMarker);
+                nodeEditor.addNode(nodeMarker);
+            }
+        });
+    }
+
+    function addEdgesAndNodesToMap() {
+        var nodeSet = [];
+        nodeSet = plotEdges();
+        plotNodes(nodeSet);
     }
 
     function loadMap() {
         readData();
         setNetworkDetails();
-        addEdgesToMap();
+        addEdgesAndNodesToMap();
     }
 
     function setNodeEditor(nEditor) {
