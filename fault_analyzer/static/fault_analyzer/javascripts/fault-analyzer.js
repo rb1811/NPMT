@@ -36,6 +36,30 @@ function FaultAnalyzer() {
         });
     }
 
+    function updateRBCDNFaultTable(rbcdn_faults) {
+        var $faultTable = $('table.fault-table');
+        $faultTable.find('tbody').html('');
+        rbcdn_faults.forEach(function (fault, index) {
+            var view = {
+                index: index+1,
+                lat: fault.x,
+                lng: fault.y
+            };
+            var template = fault_analyzer.templates.rbcdn_fault_row;
+            var output = Mustache.render(template, view);
+            var faultTableRowEl = $(output);
+            $faultTable.find('tbody').append(faultTableRowEl);
+        });
+    }
+
+    function updateFaultDetailsList(data) {
+        var $faultList = $('.fault-details-list');
+        $faultList.find('.composition_deposition_number').text(data.composition_deposition_number);
+        $faultList.find('.largest_component_size').text(data.largest_component_size);
+        $faultList.find('.smallest_component_size').text(data.smallest_component_size);
+        $faultList.find('.fault_regions_considered').text(data.fault_regions_considered);
+    }
+
     function setupTrigger() {
         var faultRadius = $('input.fault-radius').val();
         faultRadius = parseInt(faultRadius) * 1000;
@@ -52,8 +76,9 @@ function FaultAnalyzer() {
                 success: function (data) {
                     if (data.status == 1) {
                         // alert(data.message);
+                        updateRBCDNFaultTable(data.results.rbcdn_faults);
                         setupFaultTableBindings(faultRadius);
-                        // console.log(data.results);
+                        updateFaultDetailsList(data.results);
                     }
                 }
             });

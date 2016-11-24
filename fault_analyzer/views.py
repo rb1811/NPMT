@@ -7,6 +7,7 @@ import json
 import HTMLParser
 
 # Create your views here.
+from fault_analyzer.models import FaultAnalyzer
 from network_editor.models import Network
 
 
@@ -47,6 +48,6 @@ def edit(request, network_id):
 @csrf_protect
 def analyze(request):
     data = json.loads(request.body)
-    results = {}
+    results = FaultAnalyzer().analyze_generic(data['network_id'], data['fault_radius'])
     response = {'status': 1, 'message': "Network Analyzed", 'results': results}
     return JsonResponse(response)
