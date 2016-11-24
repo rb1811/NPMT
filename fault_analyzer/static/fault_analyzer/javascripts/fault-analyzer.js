@@ -18,18 +18,21 @@ function FaultAnalyzer() {
     }
 
     function setupFaultTableBindings(faultRadius) {
-        var circle;
-        $('table.fault-table').find('tbody tr').on('click', function () {
-            var self = $(this);
-            if (self.attr('data-selected') == 'true') {
-                self.attr('data-selected', 'false');
-                circle.remove();
-            } else {
-                self.attr('data-selected', 'true');
-                var lat = self.find(".lat").text(),
-                    lng = self.find(".lng").text();
-                circle = new L.circle([lat, lng], {radius: faultRadius}).addTo(myMap);
-            }
+        var trs = $('table.fault-table').find('tbody tr');
+        var circles = new Array(trs);
+        trs.toArray().forEach(function (tr, i) {
+            $(tr).on('click', function () {
+                var self = $(this);
+                if (self.attr('data-selected') == 'true') {
+                    self.attr('data-selected', 'false');
+                    circles[i].remove();
+                } else {
+                    self.attr('data-selected', 'true');
+                    var lat = self.find(".lat").text(),
+                        lng = self.find(".lng").text();
+                    circles[i] = new L.circle([lat, lng], {radius: faultRadius}).addTo(myMap);
+                }
+            });
         });
     }
 
@@ -48,9 +51,9 @@ function FaultAnalyzer() {
                 data: JSON.stringify({network_id: networkId, fault_radius: faultRadius}),
                 success: function (data) {
                     if (data.status == 1) {
-                        alert(data.message);
+                        // alert(data.message);
                         setupFaultTableBindings(faultRadius);
-                        console.log(data.results);
+                        // console.log(data.results);
                     }
                 }
             });

@@ -4,4 +4,13 @@
       padding: 10px;
     }
   }
+  .fault-table-container {
+    max-height: 150px;
+    overflow: auto;
+  }
+  table.fault-table {
+    tbody tr {
+      cursor: pointer;
+    }
+  }
 }
