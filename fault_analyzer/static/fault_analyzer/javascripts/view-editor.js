@@ -22,8 +22,21 @@ function ViewEditor() {
         $('.network-description').val(description);
     }
 
+    function addEdge(myMap, startNode, endNode) {
+        if (startNode != endNode) {
+            var latlngs = [
+                [startNode.getLatLng().lat, startNode.getLatLng().lng],
+                [endNode.getLatLng().lat, endNode.getLatLng().lng]
+            ];
+            var polyline = L.polyline(latlngs, {color: 'red'});
+            polyline.addTo(myMap);
+        }
+    }
+
+
     return {
         createNetworkTable: createNetworkTable,
-        setNetworkDetails: setNetworkDetails
+        setNetworkDetails: setNetworkDetails,
+        addEdge: addEdge
     }
 }

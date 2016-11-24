@@ -36,14 +36,85 @@ function NetworkLoader() {
         });
     }
 
+    function nodeExists(nodeSet, currentNode) {
+        var returnVal = false;
+        nodeSet.forEach(function (node) {
+            if (Util.isEquivalent(node, currentNode)) {
+                returnVal = true;
+            }
+        });
+        return returnVal;
+    }
+
+    function plotEdges() {
+        var startMarker, endMarker, nodeSet = [];
+        edges.forEach(function (edge) {
+            var startNode = edge.start_node,
+                endNode = edge.end_node;
+
+            startMarker = new L.marker([startNode.x, startNode.y]);
+            if (!nodeExists(nodeSet, startNode)) {
+                nodeSet.push(startNode);
+                startMarker.addTo(myMap);
+                addNode(startMarker);
+            }
+            endMarker = new L.marker([endNode.x, endNode.y]);
+            if (!nodeExists(nodeSet, endNode)) {
+                nodeSet.push(endNode);
+                endMarker.addTo(myMap);
+                addNode(endMarker);
+            }
+            viewEditor.addEdge(myMap, startMarker, endMarker);
+
+        });
+        return nodeSet;
+    }
+
+    function showNodeDetail(popup, nodeMarker) {
+        popup.setLatLng(nodeMarker.getLatLng())
+            .setContent(getNodeTemplate(nodeMarker.getLatLng()))
+            .openOn(myMap);
+    }
+
+    function addNode(nodeMarker) {
+        var popup = L.popup();
+        nodeMarker.on('click', function (e) {
+            showNodeDetail(popup, nodeMarker);
+        });
+    }
+
+    function plotNodes(nodeSet) {
+        nodes.forEach(function (node) {
+            if (!nodeExists(nodeSet, node)) {
+                var nodeMarker = new L.marker([node.x, node.y]);
+                nodeMarker.addTo(myMap);
+                addNode(nodeMarker);
+            }
+        });
+    }
+
+
+    function addEdgesAndNodesToMap() {
+        var nodeSet = [];
+        nodeSet = plotEdges();
+        plotNodes(nodeSet);
+
+    }
+
+    function loadNetwork() {
+        if (window.network_editor.mode == 'edit') {
+            readData();
+            setNetworkDetails();
+            addEdgesAndNodesToMap();
+        }
+    }
+
     return {
         init: function (vEditor) {
             viewEditor = vEditor;
             initMap();
-            // readData();
-            // setNetworkDetails();
             bindLoadNetworkModal();
-        }
-
+        },
+        loadNetwork: loadNetwork
     }
 }
