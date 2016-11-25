@@ -68,6 +68,7 @@ function SpecifiedFaultAnalyzer() {
                 data: JSON.stringify(get_fault_nodes()),
                 success: function (data) {
                     if (data.status == 1) {
+                        window.fault_analyzer.fault_nodes = data.nodes;
                         viewEditor.plotFaultRegion(myMap, data.nodes);
                     }
                 }
