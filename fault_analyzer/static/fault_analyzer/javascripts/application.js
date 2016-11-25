@@ -3,7 +3,7 @@ $(function () {
     var networkLoader = new NetworkLoader();
     networkLoader.init(viewEditor);
     networkLoader.loadNetwork();
-    var faultAnalyzer = new FaultAnalyzer();
-    faultAnalyzer.init(networkLoader.getMap());
+    var genericFaultAnalyzer = new GenericFaultAnalyzer();
+    genericFaultAnalyzer.init(networkLoader.getMap());
     Util.enableTooltip();
 });

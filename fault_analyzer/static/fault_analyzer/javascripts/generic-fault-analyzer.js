@@ -1,4 +1,4 @@
-function FaultAnalyzer() {
+function GenericFaultAnalyzer() {
     var myMap;
 
     function setupAjaxForCSRF() {
