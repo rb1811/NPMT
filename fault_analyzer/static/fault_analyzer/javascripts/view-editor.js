@@ -1,4 +1,6 @@
 function ViewEditor() {
+    var faultRegionPolygon;
+
     function createNetworkTable(networks) {
         var $networks = $('#networks-table');
         $networks.find('tbody').html('');
@@ -28,15 +30,56 @@ function ViewEditor() {
                 [startNode.getLatLng().lat, startNode.getLatLng().lng],
                 [endNode.getLatLng().lat, endNode.getLatLng().lng]
             ];
-            var polyline = L.polyline(latlngs, {color: 'red'});
+            var polyline = L.polyline(latlngs, {color: 'orange'});
             polyline.addTo(myMap);
         }
     }
 
+    function addNodeToTable(node) {
+        var $specifiedFaultsTable = $('#specified-faults-table');
+        var view = {
+            lat: node.getLatLng().lat,
+            lng: node.getLatLng().lng
+        }, hoverIcon = L.icon({
+            iconUrl: '/static/network_editor/leaflet/images/marker-icon-yellow.png',
+            shadowUrl: '/static/network_editor/leaflet/images/marker-shadow.png'
+        }), faultIcon = L.icon({
+            iconUrl: '/static/network_editor/leaflet/images/marker-icon-red.png',
+            shadowUrl: '/static/network_editor/leaflet/images/marker-shadow.png'
+        });
+        var output = Mustache.render(fault_analyzer.templates.faultNode, view);
+        var faultRowEl = $(output);
+
+        faultRowEl.hover(function () {
+            node.setIcon(hoverIcon);
+        }, function () {
+            node.setIcon(faultIcon);
+        });
+
+        faultRowEl.find('.delete-node').on('click', function (e) {
+            node.remove();
+            $(this).parents('tr').remove();
+        });
+
+        $specifiedFaultsTable.find('tbody').append(faultRowEl);
+    }
+
+    function plotFaultRegion(myMap, nodes) {
+        if (faultRegionPolygon) {
+            faultRegionPolygon.remove();
+        }
+        var latlngs = [];
+        Array.from(nodes).forEach(function (node) {
+            latlngs.push([node.lat, node.lng]);
+        });
+        faultRegionPolygon = L.polygon(latlngs, {color: 'red'}).addTo(myMap);
+    }
 
     return {
         createNetworkTable: createNetworkTable,
         setNetworkDetails: setNetworkDetails,
-        addEdge: addEdge
+        addEdge: addEdge,
+        addNodeToTable: addNodeToTable,
+        plotFaultRegion: plotFaultRegion
     }
 }

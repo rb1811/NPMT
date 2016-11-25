@@ -110,36 +110,70 @@
                                  role="tabpanel"
                                  aria-labelledby="headingSpecifiedFaults">
                                 <div class="panel-body">
-                                    <h5>Define Fault Coordinates:
-                                        <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
-                                              data-placement="right"
-                                              title="Click on the map to define fault coordinates."
-                                              aria-hidden="true"></span>
-                                    </h5>
-                                    <div class="fault-table-container">
-                                        <table id="specified-faults-table" class="table fault-table">
-                                            <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Latitude</th>
-                                                <th>Longitude</th>
-                                                <th></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr data-lat="" data-lng="">
-                                                <th scope="row">1</th>
-                                                <td class="text-overflow lat"><span>48.6909603909255</span></td>
-                                                <td class="text-overflow lng"><span>-11.337890625</span></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-danger btn-xs">
-                                                        remove
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="row-space clearfix" id="fault-table-accordion">
+                                        <h5>1. Define Fault Coordinates:
+                                            <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
+                                                  data-placement="right"
+                                                  title="Click on the map to define fault coordinates."
+                                                  aria-hidden="true"></span>
+                                        </h5>
+                                        <div class="fault-table-container row-space">
+                                            <table id="specified-faults-table" class="table fault-table">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Latitude</th>
+                                                    <th>Longitude</th>
+                                                    <th>
+                                                        <button class="btn btn-xs btn-default" data-toggle="collapse"
+                                                                data-parent="#fault-table-accordion"
+                                                                href="#fault-table-collapse" disabled>Show
+                                                        </button>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="collapse in" aria-labelledby="headingFaultTable"
+                                                       id="fault-table-collapse">
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
+                                    <div class="row-space clearfix">
+                                        <h5>2. Generate Fault Region
+                                            <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
+                                                  data-placement="right"
+                                                  title="Add at least 3 faults on the map to generate a fault region."
+                                                  aria-hidden="true"></span>
+                                        </h5>
+                                        <div class="col-sm-12 text-center">
+                                            <form id="generate-fault-region-form" action='#' class="inline-block"
+                                                  data-url="{% url 'fault_analyzer:fault_region' %}" method="post">
+                                                {% csrf_token %}
+                                                <button id="generate-fault-region" type="submit"
+                                                        class="btn btn-primary">Genarate Fault Region
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix">
+                                        <h5>3. Analyze Fault Network
+                                            <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
+                                                  data-placement="right"
+                                                  title="Add at least 3 faults on the map to generate a fault region."
+                                                  aria-hidden="true"></span>
+                                        </h5>
+                                        <div class="col-sm-12 text-center">
+                                            <button role="button" data-toggle="collapse"
+                                                    data-parent="#fault-table-accordion"
+                                                    href="#fault-table-collapse"
+                                                    class="btn btn-primary"
+                                                    aria-expanded="false" aria-controls="fault-table-collapse">
+                                                Analyze Network Faults
+                                            </button>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>

@@ -51,3 +51,11 @@ def analyze(request):
     results = FaultAnalyzer().analyze_generic(data['network_id'], data['fault_radius'])
     response = {'status': 1, 'message': "Network Analyzed", 'results': results}
     return JsonResponse(response)
+
+
+@csrf_protect
+def fault_region(request):
+    data = json.loads(request.body)
+    fault_region_nodes = FaultAnalyzer().generate_fault_region(data['nodes'])
+    response = {'status': 1, 'message': "Fault Region", 'nodes': fault_region_nodes}
+    return JsonResponse(response)

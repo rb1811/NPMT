@@ -65,7 +65,6 @@ function NetworkLoader() {
                 addNode(endMarker);
             }
             viewEditor.addEdge(myMap, startMarker, endMarker);
-
         });
         return nodeSet;
     }

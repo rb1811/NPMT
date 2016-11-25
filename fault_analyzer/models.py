@@ -11,3 +11,6 @@ class FaultAnalyzer(models.Model):
             'fault_regions_considered': 2000,
             'rbcdn_faults': [{'x': 48.6909603909255, 'y': -11.337890625}, {'x': 54.3677585240684, 'y': -86.572265625}]
         }
+
+    def generate_fault_region(self, nodes):
+        return nodes
