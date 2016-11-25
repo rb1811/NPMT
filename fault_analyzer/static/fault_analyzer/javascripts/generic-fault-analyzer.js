@@ -1,22 +1,6 @@
 function GenericFaultAnalyzer() {
     var myMap;
 
-    function setupAjaxForCSRF() {
-        var csrfSafeMethod = function (method) {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        };
-
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    var csrftoken = Cookies.get('csrftoken');
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
-    }
-
     function setupFaultTableBindings(faultRadius) {
         var trs = $('table.fault-table').find('tbody tr');
         var circles = new Array(trs);
@@ -41,7 +25,7 @@ function GenericFaultAnalyzer() {
         $faultTable.find('tbody').html('');
         rbcdn_faults.forEach(function (fault, index) {
             var view = {
-                index: index+1,
+                index: index + 1,
                 lat: fault.x,
                 lng: fault.y
             };
@@ -64,7 +48,7 @@ function GenericFaultAnalyzer() {
         var faultRadius = $('input.fault-radius').val();
         faultRadius = parseInt(faultRadius) * 1000;
         var networkId = window.network_editor.network_id;
-        setupAjaxForCSRF();
+        Util.setupAjaxForCSRF();
 
         $('#analyze-form').on('submit', function (e) {
             var method = $(this).attr('method');

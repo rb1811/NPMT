@@ -116,12 +116,12 @@ function NetworkLoader() {
     }
 
     return {
-        init: function (vEditor) {
-            viewEditor = vEditor;
+        init: function () {
+            viewEditor = new ViewEditor();
             initMap();
             bindLoadNetworkModal();
+            loadNetwork();
         },
-        loadNetwork: loadNetwork,
         getMap: function () {
             return myMap;
         }
