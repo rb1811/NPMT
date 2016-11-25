@@ -10,9 +10,9 @@
                     <h4>Fault Editor</h4>
                     <div class="panel-group" id="fault-accordion" role="tablist" aria-multiselectable="true">
                         <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingOne">
+                            <div class="panel-heading" role="tab" id="headingGenericFaults">
                                 <h4 class="panel-title">
-                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                    <a role="button" data-toggle="collapse" data-parent="#fault-accordion"
                                        href="#generic-faults-collapse"
                                        aria-expanded="false" aria-controls="generic-faults-collapse">
                                         Generic Faults
@@ -21,8 +21,9 @@
                                     </a>
                                 </h4>
                             </div>
-                            <div id="generic-faults-collapse" class="panel-collapse collapse out" role="tabpanel"
-                                 aria-labelledby="headingOne">
+                            <div id="generic-faults-collapse" class="fault-collapse panel-collapse collapse out"
+                                 role="tabpanel"
+                                 aria-labelledby="headingGenericFaults">
                                 <div class="panel-body">
                                     <div class="row row-space">
                                         <form id="analyze-form" action='#' data-url="{% url 'fault_analyzer:analyze' %}"
@@ -43,7 +44,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="row row-space">
+                                    <div class="row">
                                         <div class="col-sm-12">
                                             <div class="panel panel-default">
                                                 <!-- Default panel contents -->
@@ -89,6 +90,55 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingSpecifiedFaults">
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#fault-accordion"
+                                       href="#specified-faults-collapse"
+                                       aria-expanded="false" aria-controls="specified-faults-collapse">
+                                        Specified Faults
+                                        <span class="pull-right glyphicon glyphicon-chevron-down"
+                                              aria-hidden="true"></span>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="specified-faults-collapse" class="fault-collapse panel-collapse collapse in"
+                                 role="tabpanel"
+                                 aria-labelledby="headingSpecifiedFaults">
+                                <div class="panel-body">
+                                    <h5>Define Fault Coordinates:
+                                        <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
+                                              data-placement="right"
+                                              title="Click on the map to define fault coordinates."
+                                              aria-hidden="true"></span>
+                                    </h5>
+                                    <div class="fault-table-container">
+                                        <table id="specified-faults-table" class="table fault-table">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Latitude</th>
+                                                <th>Longitude</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-lat="" data-lng="">
+                                                <th scope="row">1</th>
+                                                <td class="text-overflow lat"><span>48.6909603909255</span></td>
+                                                <td class="text-overflow lng"><span>-11.337890625</span></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger btn-xs">
+                                                        remove
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>

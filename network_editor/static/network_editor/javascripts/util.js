@@ -35,5 +35,10 @@ var Util = {
         $('body').popover({
             selector: '[data-toggle="popover"]'
         });
+    },
+    enableTooltip: function () {
+        $('body').tooltip({
+            selector: '[data-toggle="tooltip"]'
+        });
     }
 };

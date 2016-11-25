@@ -5,4 +5,5 @@ $(function () {
     networkLoader.loadNetwork();
     var faultAnalyzer = new FaultAnalyzer();
     faultAnalyzer.init(networkLoader.getMap());
+    Util.enableTooltip();
 });

@@ -75,7 +75,7 @@ function FaultAnalyzer() {
                 data: JSON.stringify({network_id: networkId, fault_radius: faultRadius}),
                 success: function (data) {
                     if (data.status == 1) {
-                        // alert(data.message);
+                        // alert(data.mes  sage);
                         updateRBCDNFaultTable(data.results.rbcdn_faults);
                         setupFaultTableBindings(faultRadius);
                         updateFaultDetailsList(data.results);

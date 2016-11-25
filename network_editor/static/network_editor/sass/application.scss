@@ -8,7 +8,7 @@ body {
   }
   .truncate {
     width: 80px;
-    height:15px;
+    height: 15px;
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
@@ -24,5 +24,11 @@ body {
 
   .row-space {
     margin-bottom: 10px;
+  }
+
+  .text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
