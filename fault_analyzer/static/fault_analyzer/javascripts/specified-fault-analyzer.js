@@ -80,7 +80,22 @@ function SpecifiedFaultAnalyzer() {
     }
 
     function bindAnalyzeFaultRegionAction() {
-
+        $('#analyze-fault-network-form').on('submit', function (e) {
+            var method = $(this).attr('method');
+            var url = $(this).data('url');
+            $.ajax({
+                type: method,
+                url: url,
+                data: JSON.stringify(window.fault_analyzer.fault_nodes),
+                success: function (data) {
+                    if (data.status == 1) {
+                        console.log(data.results);
+                    }
+                }
+            });
+            e.preventDefault();
+            return false;
+        });
     }
 
     function bindActions() {

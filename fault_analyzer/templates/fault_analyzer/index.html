@@ -163,13 +163,19 @@
                                                   aria-hidden="true"></span>
                                         </h5>
                                         <div class="col-sm-12 text-center">
-                                            <button role="button" data-toggle="collapse"
-                                                    data-parent="#fault-table-accordion"
-                                                    href="#fault-table-collapse"
-                                                    class="btn btn-primary"
-                                                    aria-expanded="false" aria-controls="fault-table-collapse">
-                                                Analyze Network Faults
-                                            </button>
+                                            <form id="analyze-fault-network-form" action='#' class="inline-block"
+                                                  data-url="{% url 'fault_analyzer:analyze_fault_network' %}" method="post">
+                                                {% csrf_token %}
+                                                <button role="button" data-toggle="collapse"
+                                                        data-parent="#fault-table-accordion"
+                                                        href="#fault-table-collapse"
+                                                        class="btn btn-primary"
+                                                        type="submit"
+                                                        aria-expanded="false" aria-controls="fault-table-collapse">
+                                                    Analyze Network Faults
+                                                </button>
+                                            </form>
+
                                         </div>
                                     </div>
 
