@@ -3,12 +3,10 @@ var MercatorConverter = ({
     r_minor: 6356752.314245179,//defined as constant
     f: 298.257223563,//1/f=(a-b)/a , a=r_major, b=r_minor
     deg2rad: function (d) {
-        var r = d * (Math.PI / 180.0);
-        return r;
+        return d * (Math.PI / 180.0);
     },
     rad2deg: function (r) {
-        var d = r / (Math.PI / 180.0);
-        return d;
+        return r / (Math.PI / 180.0);
     },
     ll2m: function (lon, lat) //lat lon to mercator
     {

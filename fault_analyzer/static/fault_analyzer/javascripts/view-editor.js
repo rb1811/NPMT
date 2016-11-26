@@ -18,6 +18,9 @@ function ViewEditor() {
             $networks.find('tbody').append(networkRowEl);
         });
     }
+    function deleteFaultNodesFromMap() {
+        $('#specified-faults-table').find('tbody').children().find('.delete-node').trigger('click');
+    }
 
     function setNetworkDetails(name, description) {
         $('.network-name').text(name);
@@ -80,6 +83,7 @@ function ViewEditor() {
         setNetworkDetails: setNetworkDetails,
         addEdge: addEdge,
         addNodeToTable: addNodeToTable,
-        plotFaultRegion: plotFaultRegion
+        plotFaultRegion: plotFaultRegion,
+        deleteFaultNodesFromMap: deleteFaultNodesFromMap
     }
 }

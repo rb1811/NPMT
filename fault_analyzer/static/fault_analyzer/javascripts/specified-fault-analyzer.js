@@ -51,11 +51,11 @@ function SpecifiedFaultAnalyzer() {
 
     function get_fault_nodes() {
         var faultRows = $('#specified-faults-table').find('tbody').children();
-        return {
-            nodes: faultRows.map(function (i, faultRow) {
-                return {lat: $(faultRow).data('lat'), lng: $(faultRow).data('lng')};
-            })
-        };
+        var response = {nodes: []};
+        faultRows.map(function (i, faultRow) {
+            response.nodes.push({lat: $(faultRow).data('lat'), lng: $(faultRow).data('lng')});
+        });
+        return response
     }
 
     function bindGenerateFaultRegionAction() {
@@ -69,6 +69,7 @@ function SpecifiedFaultAnalyzer() {
                 success: function (data) {
                     if (data.status == 1) {
                         window.fault_analyzer.fault_nodes = data.nodes;
+                        viewEditor.deleteFaultNodesFromMap();
                         viewEditor.plotFaultRegion(myMap, data.nodes);
                     }
                 }
