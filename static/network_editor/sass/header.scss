@@ -1,0 +1,33 @@
+.navbar-brand {
+  padding: 5px 25px;
+  img {
+    height: 40px;
+    width: 40px;
+  }
+}
+
+.navbar, .navbar-default {
+  background-color: black;
+  border-color: black;
+  color: white;
+  margin-bottom: 0;
+  .navbar-nav {
+    li {
+      a {
+        color: white;
+        &:hover {
+          color: white;
+          background-color: rgba(28, 64, 72, 0.81);
+        }
+      }
+      &.active a {
+        color: white;
+        background-color: #2b5f6b;
+        &:hover {
+          color: white;
+          background-color: #2b5f6b;
+        }
+      }
+    }
+  }
+}

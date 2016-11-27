@@ -1,0 +1,64 @@
+
+#content {
+  background-color: white;
+  padding-top: 10px;
+  .map-container {
+    margin-top: 10px;
+    height: 530px;
+  }
+}
+
+.network-editor {
+
+  .node-list {
+    .node-list-item {
+      position: relative;
+      p {
+        margin-bottom: 0;
+      }
+      .delete-node, .edit-node {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        width: 48px;
+      }
+      .edit-node {
+        top: 34px;
+      }
+    }
+  }
+  .edge-list {
+    .edge-list-item {
+      position: relative;
+      .delete-edge, .edit-edge {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        width: 48px;
+      }
+      .edit-node {
+        top: 34px;
+      }
+    }
+  }
+
+  #sidebar {
+    padding-top: 10px;
+    .list-title {
+      width: 100px;
+      font-size: x-large;
+    }
+    #add-node, #add-edge {
+      margin-bottom: 10px;
+    }
+  }
+
+  .edge-list, .node-list {
+    max-height: 180px;
+    overflow: auto;
+  }
+  #load-network-modal .table-container {
+    max-height: 400px;
+    overflow: auto;
+  }
+}

@@ -1,0 +1,28 @@
+.fault-analyzer {
+  #sidebar {
+    .panel-body {
+      padding: 10px;
+    }
+  }
+  .fault-table-container {
+    max-height: 150px;
+    overflow: auto;
+    td {
+      max-width: 60px;
+    }
+  }
+  table.fault-table {
+    tbody tr {
+      cursor: pointer;
+    }
+  }
+
+  .fault-collapse {
+    .panel {
+      margin-bottom: 0;
+      .well, .list-group {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

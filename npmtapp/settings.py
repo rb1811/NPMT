@@ -24,7 +24,7 @@ SECRET_KEY = '3$-uhne*wq6c#8o=28bi-p5smcq_))g3bd3cj1wym)a@dkbq-m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.218.109.227']
 
 # Application definition
 
@@ -55,9 +55,6 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'npmtapp.urls'
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates').replace('\\', '/'),
-)
 
 TEMPLATES = [
     {
@@ -86,8 +83,7 @@ DATABASES = {
         'NAME': 'npmtapp',
         'USER': 'npmtapp_user',
         'PASSWORD': 'npmt@app',
-        'HOST': 'localhost',
-        'PORT': '',
+        'HOST': 'localhost'
     }
 }
 
@@ -108,12 +104,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+  os.path.join(BASE_DIR,'network_editor/static/network_editor/javascripts/lib')
+]
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
     'static_precompiler.finders.StaticPrecompilerFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    # other finders..
 
 )
