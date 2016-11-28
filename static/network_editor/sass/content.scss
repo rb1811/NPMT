@@ -28,6 +28,12 @@
     }
   }
   .edge-list {
+    .edge-start, .edge-end {
+      span.text-overflow {
+        display: inline-flex;
+        width: 60px;
+      }
+    }
     .edge-list-item {
       position: relative;
       .delete-edge, .edit-edge {
