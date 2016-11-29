@@ -453,9 +453,9 @@ def generate_node_positions(network):
 
 
 def analyze_generic(network, fault_radius):
-    global edge_list, node_positions, G, pos, nvz_radius
+    global edge_list, node_positions, G, pos, nvzradius
     precision_correction_val = 0.06
-    nvz_radius = fault_radius + precision_correction_val
+    nvzradius = fault_radius + precision_correction_val
     add_nodes_to_graph(G, network)
     add_edges_to_graph(G, network)
     node_positions = generate_node_positions(network)
