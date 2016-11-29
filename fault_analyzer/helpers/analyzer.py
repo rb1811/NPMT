@@ -304,15 +304,15 @@ def calculate_and_create_output_params():
     RBCDN_faults = dict(zip(Fipoints.keys(), RBCDNlist))
     max_rbcdn = max(RBCDNlist)
     fault_centers = [item[0] for item in RBCDN_faults.items() if item[1] == max_rbcdn]
-    print "************* Fault Centers **********"
-    print fault_centers
-    # print "RBLCS,RBCDN,RBSCS,RBC", min(RBLCSlist), max(RBCDNlist), min(RBSCSlist)
+
+    rbcdn_faults = [{'y': m.x2lon_m(fault[0]), 'x': m.y2lat_m(fault[1])} for fault in fault_centers]
+
     return {
         'composition_deposition_number': max_rbcdn,
         'largest_component_size': min(RBLCSlist),
         'smallest_component_size': min(RBSCSlist),
         'fault_regions_considered': len(Fipoints),
-        'rbcdn_faults': [{'x': 48.6909603909255, 'y': -11.337890625}, {'x': 54.3677585240684, 'y': -86.572265625}]
+        'rbcdn_faults': rbcdn_faults
     }
 
 
@@ -452,7 +452,7 @@ def generate_node_positions(network):
     return n_positions
 
 
-def analyze(network, fault_radius):
+def analyze_generic(network, fault_radius):
     global edge_list, node_positions, G, pos, nvz_radius
     precision_correction_val = 0.06
     nvz_radius = fault_radius + precision_correction_val

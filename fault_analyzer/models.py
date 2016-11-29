@@ -11,7 +11,7 @@ from network_editor.models import Network
 class FaultAnalyzer(models.Model):
     def analyze_generic(self, network_id, fault_radius):
         network = Network.objects.get(pk=network_id)
-        results = analyzer.analyze(network, fault_radius)
+        results = analyzer.analyze_generic(network, fault_radius)
         return results
 
     def analyze_specified_faults(self, network_id, fault_nodes):
