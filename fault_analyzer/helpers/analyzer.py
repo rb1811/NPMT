@@ -2,7 +2,7 @@ import networkx as nx
 import mercator as m
 import numpy as np
 from sympy import *
-
+from itertools import chain, combinations
 from sympy.geometry import *
 from shapely.geometry import LineString
 from shapely.geometry import Polygon
@@ -266,6 +266,27 @@ def LinePassingPR(edge, current_pr_center):
         return (edge)
 
 
+def powerset(iterable):
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(1, len(s) + 1))
+
+
+def region_connectivity():
+    global Fipoints
+    reg_connect = []
+    for key in Fipoints.keys():
+        temp = [element for element in Fipoints[key] if type(element) is not tuple]
+        subsets = list(powerset(temp))
+        subsets = [list(element) for element in subsets]
+        for nodeset in subsets:
+            H = G.copy()
+            H.remove_nodes_from(nodeset)
+            if (len(sorted(nx.connected_components(H), key=len, reverse=True)) > 1):
+                reg_connect.append(len(nodeset))
+                break
+    return min(reg_connect)
+
+
 def calculate_and_create_output_params():
     global Fipoints
     RBCDNlist = RBLCSlist = RBSCSlist = []
@@ -279,10 +300,15 @@ def calculate_and_create_output_params():
         concomplist = sorted(nx.connected_components(H), key=len, reverse=True)
         RBSCSlist.append(min([len(concomp) for concomp in concomplist]))
         RBLCSlist.append(max([len(concomp) for concomp in concomplist]))
-    # RBC=region_connectivity()
+    RBC = region_connectivity()
+    RBCDN_faults = dict(zip(Fipoints.keys(), RBCDNlist))
+    max_rbcdn = max(RBCDNlist)
+    fault_centers = [item[0] for item in RBCDN_faults.items() if item[1] == max_rbcdn]
+    print "************* Fault Centers **********"
+    print fault_centers
     # print "RBLCS,RBCDN,RBSCS,RBC", min(RBLCSlist), max(RBCDNlist), min(RBSCSlist)
     return {
-        'composition_deposition_number': max(RBCDNlist),
+        'composition_deposition_number': max_rbcdn,
         'largest_component_size': min(RBLCSlist),
         'smallest_component_size': min(RBSCSlist),
         'fault_regions_considered': len(Fipoints),
@@ -437,3 +463,34 @@ def analyze(network, fault_radius):
     pos = nx.spring_layout(G, pos=node_positions, fixed=fixed_nodes)
     calculate_ipoints()
     return calculate_and_create_output_params()
+
+
+def format_fault_node_positions(fault_nodes):
+    return [(m.lon2x_m(fault_node['lng']), m.lat2y_m(fault_node['lat'])) for fault_node in fault_nodes]
+
+
+def analyze_specified(network, fault_nodes):
+    global node_positions, edge_list
+    add_nodes_to_graph(G, network)
+    add_edges_to_graph(G, network)
+    poly_coord = format_fault_node_positions(fault_nodes)
+    node_positions = generate_node_positions(network)
+    H = G.copy()
+    for node in node_positions.keys():
+        if ((Polygon(poly_coord).contains(shPoint(node_positions[node])) or Polygon(poly_coord).intersects(
+                shPoint(node_positions[node]))) and H.has_node(node)):
+            H.remove_node(node)
+    for edge in edge_list:
+        sh_edge = LineString([Point(node_positions[edge[0]]), Point(node_positions[edge[1]])])
+        if ((sh_edge.intersects(LineString(poly_coord))) and H.has_edge(*edge)):
+            H.remove_edge(*edge)
+    concomplist = sorted(nx.connected_components(H), key=len, reverse=True)
+    largest_component_size = max([len(concomp) for concomp in concomplist])
+    smallest_component_size = min([len(concomp) for concomp in concomplist])
+    return {
+        'number_of_surviving_nodes': str(len(H.nodes())) + "/" + str(len(node_positions.keys())),
+        'number_of_surviving_links': str(len(H.edges())) + "/" + str(len(edge_list)),
+        'number_of_connected_components': str(len(concomplist)),
+        'largest_connected_component_size': largest_component_size,
+        'smallest_connected_component_size': smallest_component_size
+    }

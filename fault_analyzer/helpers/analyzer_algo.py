@@ -175,10 +175,10 @@ def region_connectivity():
                 break
     return min(reg_connect)
 
-
 def param_cal():
     global Fipoints
     RBCDNlist = RBLCSlist = RBSCSlist = []
+    RBCDN_faults = {}
     for key in Fipoints.keys():
         H = G.copy()
         for element in Fipoints[key]:
@@ -189,9 +189,20 @@ def param_cal():
         concomplist = sorted(nx.connected_components(H), key=len, reverse=True)
         RBSCSlist.append(min([len(concomp) for concomp in concomplist]))
         RBLCSlist.append(max([len(concomp) for concomp in concomplist]))
-    # RBC=region_connectivity()
-    print "RBLCS,RBCDN,RBSCS,RBC", min(RBLCSlist), max(RBCDNlist), min(RBSCSlist)
+        RBCDNlist.append(len(concomplist))
+        # RBCDN_faults[key]=len(concomplist)
+    RBC = region_connectivity()
+    max_rbcdn = max(RBCDNlist)
+    RBCDN_faults = dict(zip(Fipoints.keys(), RBCDNlist))
+    # for item in RBCDN_faults.items():
+    #		print item
+    fault_center = [item[0] for item in RBCDN_faults.items() if item[1] == max_rbcdn]
+    print "RBLCS,RBCDN,RBSCS,RBC,faults_considered,fault_regions_considered", \
+        min(RBLCSlist), max_rbcdn, min(
+        RBSCSlist), RBC, len(Fipoints.keys()), fault_center, fault_center
 
+
+########################################################################################################################Create LVZ
 
 ########################################################################################################################Create LVZ
 

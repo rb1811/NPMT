@@ -162,20 +162,42 @@
                                                   title="Add at least 3 faults on the map to generate a fault region."
                                                   aria-hidden="true"></span>
                                         </h5>
-                                        <div class="col-sm-12 text-center">
+                                        <div class="col-sm-12 text-center row-space">
                                             <form id="analyze-fault-network-form" action='#' class="inline-block"
-                                                  data-url="{% url 'fault_analyzer:analyze_fault_network' %}" method="post">
+                                                  data-url="{% url 'fault_analyzer:analyze_fault_network' %}"
+                                                  method="post">
                                                 {% csrf_token %}
-                                                <button role="button" data-toggle="collapse"
-                                                        data-parent="#fault-table-accordion"
-                                                        href="#fault-table-collapse"
+                                                <button role="button"
                                                         class="btn btn-primary"
-                                                        type="submit"
-                                                        aria-expanded="false" aria-controls="fault-table-collapse">
+                                                        type="submit">
                                                     Analyze Network Faults
                                                 </button>
                                             </form>
 
+                                        </div>
+                                        <div class="well well-sm col-sm-12">
+                                            <ul class="list-group specified-fault-details-list">
+                                                <li class="list-group-item">
+                                                    <span class="badge number_of_surviving_nodes"></span>
+                                                    Number of Surviving Nodes:
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge number_of_surviving_links"></span>
+                                                    Number of Surviving Links:
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge number_of_connected_components"></span>
+                                                    Number of Connected Components:
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge largest_connected_component_size"></span>
+                                                    Largest Connected Component Size:
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="badge smallest_connected_component_size"></span>
+                                                    Smallest Connected Component Size:
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
 

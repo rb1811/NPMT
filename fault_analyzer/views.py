@@ -60,8 +60,10 @@ def fault_region(request):
     response = {'status': 1, 'message': "Fault Region", 'nodes': fault_region_nodes}
     return JsonResponse(response)
 
+
 @csrf_protect
 def analyze_fault_network(request):
     data = json.loads(request.body)
-    response = {'status': 1, 'message': "Analysis of fault network", 'results': {'fault_region_nodes': 123}}
+    results = FaultAnalyzer().analyze_specified_faults(data['network_id'], data['fault_nodes'])
+    response = {'status': 1, 'message': "Analysis of fault network", 'results': results}
     return JsonResponse(response)

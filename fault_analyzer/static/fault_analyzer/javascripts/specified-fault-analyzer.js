@@ -49,6 +49,15 @@ function SpecifiedFaultAnalyzer() {
         });
     }
 
+    function updateFaultDetailsList(data) {
+        var $faultList = $('.specified-fault-details-list');
+        $faultList.find('.number_of_surviving_nodes').text(data.number_of_surviving_nodes);
+        $faultList.find('.number_of_surviving_links').text(data.number_of_surviving_links);
+        $faultList.find('.number_of_connected_components').text(data.number_of_connected_components);
+        $faultList.find('.largest_connected_component_size').text(data.largest_connected_component_size);
+        $faultList.find('.smallest_connected_component_size').text(data.smallest_connected_component_size);
+    }
+
     function get_fault_nodes() {
         var faultRows = $('#specified-faults-table').find('tbody').children();
         var response = {nodes: []};
@@ -87,10 +96,13 @@ function SpecifiedFaultAnalyzer() {
             $.ajax({
                 type: method,
                 url: url,
-                data: JSON.stringify(window.fault_analyzer.fault_nodes),
+                data: JSON.stringify({
+                    network_id: window.network_editor.network_id,
+                    fault_nodes: window.fault_analyzer.fault_nodes
+                }),
                 success: function (data) {
                     if (data.status == 1) {
-                        console.log(data.results);
+                        updateFaultDetailsList(data.results);
                     }
                 }
             });
@@ -101,7 +113,6 @@ function SpecifiedFaultAnalyzer() {
 
     function bindActions() {
         Util.setupAjaxForCSRF();
-        var networkId = window.network_editor.network_id;
         bindGenerateFaultRegionAction();
         bindAnalyzeFaultRegionAction();
     }

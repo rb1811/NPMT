@@ -14,6 +14,10 @@ class FaultAnalyzer(models.Model):
         results = analyzer.analyze(network, fault_radius)
         return results
 
+    def analyze_specified_faults(self, network_id, fault_nodes):
+        network = Network.objects.get(pk=network_id)
+        results = analyzer.analyze_specified(network, fault_nodes)
+        return results
 
     def generate_fault_region(self, nodes):
         nodes = conv.get_xy_for(nodes)
