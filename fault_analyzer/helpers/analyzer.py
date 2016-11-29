@@ -9,6 +9,7 @@ from shapely.geometry import Polygon
 from shapely.geometry import Point as shPoint
 
 nvzradius = 0
+nvzradius_unreal = 0
 edge_list = []
 node_positions = {}
 G = nx.Graph()
@@ -20,8 +21,9 @@ LVZ_node_position = {}
 
 
 def clear_variables():
-    global nvzradius, edge_list, node_positions, G, pos, exist_ipoints, Fipoints, LVZ_edges, LVZ_node_position
+    global nvzradius, nvzradius_unreal, edge_list, node_positions, G, pos, exist_ipoints, Fipoints, LVZ_edges, LVZ_node_position
     nvzradius = 0
+    nvzradius_unreal = 0
     edge_list = []
     node_positions = {}
     G = nx.Graph()
@@ -33,17 +35,24 @@ def clear_variables():
 
 
 def coordist(ipoint, node):
-    global nvzradius, node_positions
+    global nvzradius, node_positions, nvzradius_unreal
     # print "p1x {0} p1y {1} p2x {2} p2y {3} ".format(node_positions[p1][0],node_positions[p1][1],node_positions[p2][0],node_positions[p1][1])
-    dist = np.float(np.round(np.sqrt(
-        np.power((node_positions[node][0] - ipoint[0]), 2) + np.power((node_positions[node][1] - ipoint[1]), 2)), 2))
+    dist = np.float(np.sqrt(
+        np.power((node_positions[node][0] - ipoint[0]), 2) + np.power((node_positions[node][1] - ipoint[1]), 2)))
     # print "\n*************\nDist: ", dist
     # print "NVZradius: ", nvzradius
     # if(np.less_equal(np.round(dist,5),np.round(nvzradius,5))):
-    if (np.less_equal(dist, nvzradius)):
+    if (np.less_equal(dist, nvzradius_unreal)):
         return node
     else:
         return False
+
+
+def pointfinder(a1, b1, c1, a2, b2, c2):
+    a = np.array(((a1, b1), (a2, b2)))
+    b = np.array((c1, c2))
+    x, y = np.linalg.solve(a, b)
+    return (x, y)
 
 
 def LVZ(edge):
@@ -63,16 +72,16 @@ def LVZ(edge):
         t1x, t1y = start_node_X, np.add(start_node_Y, nvzradius)
         t2x, t2y = start_node_X, np.subtract(start_node_Y, nvzradius)
 
-        t1 = (np.float(np.round(t1x, 2)), np.float(np.round(t1y, 2)))
-        t2 = (np.float(np.round(t2x, 2)), np.float(np.round(t2y, 2)))
+        t1 = (np.float(t1x, 2), np.float(t1y))
+        t2 = (np.float(t2x), np.float(t2y, 2))
 
         # print t1, t2
 
         t3x, t3y = end_node_X, np.add(end_node_Y, nvzradius)
         t4x, t4y = end_node_X, np.subtract(end_node_Y, nvzradius)
 
-        t3 = (np.float(np.round(t3x, 2)), np.float(np.round(t3y, 2)))
-        t4 = (np.float(np.round(t4x, 2)), np.float(np.round(t4y, 2)))
+        t3 = (np.float(t3x), np.float(t3y))
+        t4 = (np.float(t4x), np.float(t4y))
 
         # print t3,t4
         LVZ_node_position[str(edge[0]) + str(edge[1]) + 'a'] = t1
@@ -86,21 +95,21 @@ def LVZ(edge):
 
         return
 
-    elif np.subtract(start_node_X, end_node_X) == 0:
+    elif (np.subtract(start_node_X, end_node_X) == 0):
         # print "Line parallel to y "
         edge_slope = None
         t1x, t1y = np.subtract(start_node_X, nvzradius), start_node_Y
         t2x, t2y = np.add(start_node_X, nvzradius), start_node_Y
 
-        t1 = (np.float(np.round(t1x, 2)), np.float(np.round(t1y, 2)))
-        t2 = (np.float(np.round(t2x, 2)), np.float(np.round(t2y, 2)))
+        t1 = (np.float(t1x), np.float(t1y))
+        t2 = (np.float(t2x), np.float(t2y))
 
         # print t1,t2
         t3x, t3y = np.subtract(end_node_X, nvzradius), end_node_Y
         t4x, t4y = np.add(end_node_X, nvzradius), end_node_Y
 
-        t3 = (np.float(np.round(t3x, 2)), np.float(np.round(t3y, 2)))
-        t4 = (np.float(np.round(t4x, 2)), np.float(np.round(t4y, 2)))
+        t3 = (np.float(t3x), np.float(t3y))
+        t4 = (np.float(t4x), np.float(t4y))
 
         # print t3,t4
         LVZ_node_position[str(edge[0]) + str(edge[1]) + 'a'] = t1
@@ -114,59 +123,44 @@ def LVZ(edge):
 
         return
     else:
-        # print "other lines"
-        edge_slope = np.float(
-            np.round(np.divide(np.subtract(end_node_Y, start_node_Y), np.subtract(end_node_X, start_node_X)), 2))
-        perp_slope = np.float(np.round(np.divide(-1, edge_slope), 2))
+        edge_slope = np.float(np.divide(np.subtract(end_node_Y, start_node_Y), np.subtract(end_node_X, start_node_X)))
+        perp_slope = np.float(np.divide(-1, edge_slope))
 
-        t1x = np.add(np.divide(nvzradius, np.sqrt(np.add(np.power(perp_slope, 2), 1))), start_node_X)
-        t1y = np.add(np.divide(nvzradius, np.sqrt(np.add(np.power(perp_slope, 2), 1))), start_node_Y)
+        # edge_c= np.subtract(start_node_Y,np.multiply(edge_slope,start_node_X))
+        dm2 = np.multiply(nvzradius, np.sqrt(np.add(1, np.square(edge_slope))))
 
-        t1 = (np.float(np.round(t1x, 2)), np.float(np.round(t1y, 2)))
+        upper_edge_c = -np.add(np.subtract(start_node_Y, np.multiply(edge_slope, start_node_X)), dm2)
+        upper_edge_a1 = edge_slope
+        upper_edge_b1 = -1
 
-        # print t1
-        t2x = np.subtract(start_node_X, np.divide(nvzradius, np.sqrt(np.add(np.power(perp_slope, 2), 1))))
-        t2y = np.subtract(start_node_Y, np.divide(nvzradius, np.sqrt(np.add(np.power(perp_slope, 2), 1))))
+        lower_edge_c = -np.subtract(np.subtract(start_node_Y, np.multiply(edge_slope, start_node_X)), dm2)
+        lower_edge_a1 = edge_slope
+        lower_edge_b1 = -1
 
-        t2 = (np.float(np.round(t2x, 2)), np.float(np.round(t2y, 2)))
+        start_perp_c = -np.subtract(start_node_Y, np.multiply(perp_slope, start_node_X))
+        start_perp_a1 = perp_slope
+        start_perp_b1 = -1
 
-        # print t2
+        end_perp_c = -np.subtract(end_node_Y, np.multiply(perp_slope, end_node_X))
+        end_perp_a1 = perp_slope
+        end_perp_b1 = -1
 
-        t3x = np.add(np.divide(nvzradius, np.sqrt(np.add(np.power(perp_slope, 2), 1))), end_node_X)
-        t3y = np.add(np.divide(nvzradius, np.sqrt(np.add(np.power(perp_slope, 2), 1))), end_node_Y)
+        t1 = pointfinder(upper_edge_a1, upper_edge_b1, upper_edge_c, start_perp_a1, start_perp_b1, start_perp_c)
+        t3 = pointfinder(upper_edge_a1, upper_edge_b1, upper_edge_c, end_perp_a1, end_perp_b1, end_perp_c)
 
-        t3 = (np.float(np.round(t3x, 2)), np.float(np.round(t3y, 2)))
+        t2 = pointfinder(lower_edge_a1, lower_edge_b1, lower_edge_c, start_perp_a1, start_perp_b1, start_perp_c)
+        t4 = pointfinder(lower_edge_a1, lower_edge_b1, lower_edge_c, end_perp_a1, end_perp_b1, end_perp_c)
 
-        # print t3
-        t4x = np.subtract(end_node_X, np.divide(nvzradius, np.sqrt(np.add(np.power(perp_slope, 2), 1))))
-        t4y = np.subtract(end_node_Y, np.divide(nvzradius, np.sqrt(np.add(np.power(perp_slope, 2), 1))))
+        LVZ_node_position[sstr(edge[0]) + str(edge[1]) + 'a'] = t1
+        LVZ_node_position[str(edge[0]) + str(edge[1]) + 'c'] = t3
 
-        t4 = (np.float(np.round(t4x, 2)), np.float(np.round(t4y, 2)))
+        LVZ_node_position[str(edge[0]) + str(edge[1]) + 'b'] = t2
+        LVZ_node_position[str(edge[0]) + str(edge[1]) + 'd'] = t4
 
-        # print t4
+        LVZ_edges.append((str(edge[0]) + str(edge[1]) + 'a', str(edge[0]) + str(edge[1]) + 'c'))
+        LVZ_edges.append((str(edge[0]) + str(edge[1]) + 'b', str(edge[0]) + str(edge[1]) + 'd'))
 
-        if np.divide(np.subtract(t3y, t1y), np.subtract(t3x, t1x)) == edge_slope:
-            LVZ_node_position[sstr(edge[0]) + str(edge[1]) + 'a'] = t1
-            LVZ_node_position[str(edge[0]) + str(edge[1]) + 'c'] = t3
-
-            LVZ_node_position[str(edge[0]) + str(edge[1]) + 'b'] = t2
-            LVZ_node_position[str(edge[0]) + str(edge[1]) + 'd'] = t4
-
-            LVZ_edges.append((str(edge[0]) + str(edge[1]) + 'a', str(edge[0]) + str(edge[1]) + 'c'))
-            LVZ_edges.append((str(edge[0]) + str(edge[1]) + 'b', str(edge[0]) + str(edge[1]) + 'd'))
-
-            return
-
-        else:
-            LVZ_node_position[str(edge[0]) + str(edge[1]) + 'a'] = t1
-            LVZ_node_position[str(edge[0]) + str(edge[1]) + 'd'] = t4
-
-            LVZ_node_position[str(edge[0]) + str(edge[1]) + 'b'] = t2
-            LVZ_node_position[str(edge[0]) + str(edge[1]) + 'c'] = t3
-
-            LVZ_edges.append((str(edge[0]) + str(edge[1]) + 'a', str(edge[0]) + str(edge[1]) + 'd'))
-            LVZ_edges.append((str(edge[0]) + str(edge[1]) + 'b', str(edge[0]) + str(edge[1]) + 'c'))
-            return
+        return
 
 
 def lvznvz(node, edge):
@@ -186,7 +180,7 @@ def lvznvz(node, edge):
         # exist_ipoints.append(x.coords[1])
         for xx in x.coords:
             # print "This two lvz are nvx are interesecting",node,edge, xx,np.float(np.round(xx[0],2)),np.float(np.round(xx[1],2))
-            xx = (np.float(np.round(xx[0], 2)), np.float(np.round(xx[1], 2)))
+            xx = (np.float(xx[0]), np.float(xx[1]))
             if (xx not in exist_ipoints):
                 exist_ipoints.append(xx)
                 # exist_ipoints.append(   (float(i[0]) ,  float(i[1])) )
@@ -215,8 +209,8 @@ def circleintersection(c1, c2):
     # print "Circle intersection", c1,c2
     global node_positions, nvzradius
     # print "This is c1 center {0} this is  c2 center {1}".format(node_positions[c1], node_positions[c2])
-    dist = np.float(np.round(np.sqrt(np.power((node_positions[c1][0] - node_positions[c2][0]), 2) + np.power(
-        (node_positions[c1][1] - node_positions[c2][1]), 2)), 2))
+    dist = np.float(np.sqrt(np.power((node_positions[c1][0] - node_positions[c2][0]), 2) + np.power(
+        (node_positions[c1][1] - node_positions[c2][1]), 2)))
     if (dist < 2 * nvzradius):
         # print "THis is dist", dist
         c1 = Circle(node_positions[c1], nvzradius)
@@ -228,7 +222,7 @@ def circleintersection(c1, c2):
         for i in intersection(c1, c2):
             # l[i]=(float(l[i][0]),float(l[i][1]))
             l.append((float(i[0]), float(i[1])))
-        # print "This 2 cirlces intersec at ", l
+            # print "This 2 cirlces intersec at ", l
         return l
 
     elif (dist == 2 * nvzradius):
@@ -244,37 +238,36 @@ def circleintersection(c1, c2):
 
 
 def LinePassingPR(edge, current_pr_center):
-    # print edge, current_pr_center
+    print edge, current_pr_center
     # print "\n\n, edge and current_pr _center x,y", edge, current_pr_center,current_pr_center[0],current_pr_center[1]
-    global node_positions, nvzradius, Fipoints
+    global node_positions, nvzradius, Fipoints, nvzradius_unreal
     current_edge = LineString([shPoint(node_positions[edge[0]]), shPoint(node_positions[edge[1]])])
-    current_pr = shPoint(current_pr_center).buffer(nvzradius)
+    current_pr = shPoint(current_pr_center).buffer(nvzradius_unreal)
 
     start_node, end_node = node_positions[edge[0]], node_positions[edge[1]]
 
     start_node_X, start_node_Y = start_node[0], start_node[1]
     end_node_X, end_node_Y = end_node[0], end_node[1]
 
-    dist_start_node = np.float(np.round(np.sqrt(
-        np.power((start_node_X - current_pr_center[0]), 2) + np.power((start_node_Y - current_pr_center[1]), 2)), 2))
-    dist_end_node = np.float(np.round(
-        np.sqrt(np.power((end_node_X - current_pr_center[0]), 2) + np.power((end_node_Y - current_pr_center[1]), 2)),
-        2))
+    dist_start_node = np.float(np.sqrt(
+        np.power((start_node_X - current_pr_center[0]), 2) + np.power((start_node_Y - current_pr_center[1]), 2)))
+    dist_end_node = np.float(
+        np.sqrt(np.power((end_node_X - current_pr_center[0]), 2) + np.power((end_node_Y - current_pr_center[1]), 2)))
 
-    if np.less_equal(dist_start_node, nvzradius) and edge[0] not in Fipoints[current_pr_center]:
+    if (np.less_equal(dist_start_node, nvzradius_unreal) and edge[0] not in Fipoints[current_pr_center]):
         Fipoints[current_pr_center].append(edge[0])
-
-    if np.less_equal(dist_end_node, nvzradius) and edge[1] not in Fipoints[current_pr_center]:
+    if (np.less_equal(dist_end_node, nvzradius_unreal) and edge[1] not in Fipoints[current_pr_center]):
         Fipoints[current_pr_center].append(edge[1])
 
     # current_edge = Segment(syPoint(node_positions[edge[0]]),syPoint(node_positions[edge[1]]))
     # current_pr = Circle(syPoint(current_pr_center), nvzradius)
 
 
-    if current_pr.intersects(current_edge):
+    if (current_pr.intersects(current_edge)):
         # if(intersection(current_pr,current_edge)):
-        # print "This edge intersects circle", edge, current_pr_center
+        print "This edge intersects circle", edge, current_pr_center
         # print "\n\n, edge and current_pr _center x,y", edge, current_pr_center,current_pr_center[0],current_pr_center[1]
+
         # print "THis passed",edge, current_pr_center
         return (edge)
 
@@ -285,7 +278,7 @@ def powerset(iterable):
 
 
 def region_connectivity():
-    global Fipoints
+    # global Fipoints
     reg_connect = []
     for key in Fipoints.keys():
         temp = [element for element in Fipoints[key] if type(element) is not tuple]
@@ -302,7 +295,9 @@ def region_connectivity():
 
 def calculate_and_create_output_params():
     global Fipoints
-    RBCDNlist = RBLCSlist = RBSCSlist = []
+    RBCDNlist = []
+    RBLCSlist = []
+    RBSCSlist = []
     RBCDN_faults = {}
     for key in Fipoints.keys():
         H = G.copy()
@@ -467,10 +462,11 @@ def generate_node_positions(network):
 
 
 def analyze_generic(network, fault_radius):
-    global edge_list, node_positions, G, pos, nvzradius
+    global edge_list, node_positions, G, pos, nvzradius, nvzradius_unreal
     clear_variables()
-    precision_correction_val = 0.06
-    nvzradius = np.round(fault_radius + precision_correction_val, 2)
+    precision_correction_val = 70
+    nvzradius = np.round(fault_radius)
+    nvzradius_unreal = np.round(fault_radius + precision_correction_val, 2)
     add_nodes_to_graph(G, network)
     add_edges_to_graph(G, network)
     node_positions = generate_node_positions(network)
