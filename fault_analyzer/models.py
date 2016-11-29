@@ -2,18 +2,18 @@ import json
 from django.db import models
 from scipy.spatial import ConvexHull
 from helpers import coordinates_converter as conv
-
+from helpers import analyzer
 
 # Create your models here.
+from network_editor.models import Network
+
+
 class FaultAnalyzer(models.Model):
     def analyze_generic(self, network_id, fault_radius):
-        return {
-            'composition_deposition_number': 1,
-            'largest_component_size': 5,
-            'smallest_component_size': 3,
-            'fault_regions_considered': 2000,
-            'rbcdn_faults': [{'x': 48.6909603909255, 'y': -11.337890625}, {'x': 54.3677585240684, 'y': -86.572265625}]
-        }
+        network = Network.objects.get(pk=network_id)
+        results = analyzer.analyze(network, fault_radius)
+        return results
+
 
     def generate_fault_region(self, nodes):
         nodes = conv.get_xy_for(nodes)

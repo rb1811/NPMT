@@ -2,9 +2,9 @@ window.fault_analyzer = window.fault_analyzer ? window.fault_analyzer : {};
 window.fault_analyzer.templates = {
 
     rbcdn_fault_row: '<tr><th scope="row">{{index}}</th>' +
-    '<td><span class="text-overflow lat">{{lat}}</span>' +
+    '<td class="text-overflow lat"><span>{{lat}}</span>' +
     '</td>' +
-    '<td><span class="text-overflow lng">{{lng}}</span>' +
+    '<td class="text-overflow lng"><span>{{lng}}</span>' +
     '</td>' +
     '</tr>',
 
