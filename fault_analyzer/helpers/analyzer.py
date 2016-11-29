@@ -19,6 +19,19 @@ LVZ_edges = []
 LVZ_node_position = {}
 
 
+def clear_variables():
+    global nvzradius, edge_list, node_positions, G, pos, exist_ipoints, Fipoints, LVZ_edges, LVZ_node_position
+    nvzradius = 0
+    edge_list = []
+    node_positions = {}
+    G = nx.Graph()
+    pos = {}
+    exist_ipoints = []
+    Fipoints = {}
+    LVZ_edges = []
+    LVZ_node_position = {}
+
+
 def coordist(ipoint, node):
     global nvzradius, node_positions
     # print "p1x {0} p1y {1} p2x {2} p2y {3} ".format(node_positions[p1][0],node_positions[p1][1],node_positions[p2][0],node_positions[p1][1])
@@ -290,6 +303,7 @@ def region_connectivity():
 def calculate_and_create_output_params():
     global Fipoints
     RBCDNlist = RBLCSlist = RBSCSlist = []
+    RBCDN_faults = {}
     for key in Fipoints.keys():
         H = G.copy()
         for element in Fipoints[key]:
@@ -300,16 +314,16 @@ def calculate_and_create_output_params():
         concomplist = sorted(nx.connected_components(H), key=len, reverse=True)
         RBSCSlist.append(min([len(concomp) for concomp in concomplist]))
         RBLCSlist.append(max([len(concomp) for concomp in concomplist]))
-    RBC = region_connectivity()
-    RBCDN_faults = dict(zip(Fipoints.keys(), RBCDNlist))
+        RBCDNlist.append(len(concomplist))
+        # RBCDN_faults[key]=len(concomplist)
+    # RBC = region_connectivity()
     max_rbcdn = max(RBCDNlist)
+    RBCDN_faults = dict(zip(Fipoints.keys(), RBCDNlist))
     fault_centers = [item[0] for item in RBCDN_faults.items() if item[1] == max_rbcdn]
-
     rbcdn_faults = [{'y': m.x2lon_m(fault[0]), 'x': m.y2lat_m(fault[1])} for fault in fault_centers]
-
     return {
         'composition_deposition_number': max_rbcdn,
-        'largest_component_size': min(RBLCSlist),
+        'largest_component_size': max(RBLCSlist),
         'smallest_component_size': min(RBSCSlist),
         'fault_regions_considered': len(Fipoints),
         'rbcdn_faults': rbcdn_faults
@@ -454,8 +468,9 @@ def generate_node_positions(network):
 
 def analyze_generic(network, fault_radius):
     global edge_list, node_positions, G, pos, nvzradius
+    clear_variables()
     precision_correction_val = 0.06
-    nvzradius = fault_radius + precision_correction_val
+    nvzradius = np.round(fault_radius + precision_correction_val, 2)
     add_nodes_to_graph(G, network)
     add_edges_to_graph(G, network)
     node_positions = generate_node_positions(network)
@@ -471,6 +486,7 @@ def format_fault_node_positions(fault_nodes):
 
 def analyze_specified(network, fault_nodes):
     global node_positions, edge_list
+    clear_variables()
     add_nodes_to_graph(G, network)
     add_edges_to_graph(G, network)
     poly_coord = format_fault_node_positions(fault_nodes)

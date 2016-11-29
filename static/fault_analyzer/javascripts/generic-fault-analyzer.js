@@ -1,9 +1,9 @@
 function GenericFaultAnalyzer() {
-    var myMap;
+    var myMap, circles;
 
     function setupFaultTableBindings(faultRadius) {
         var trs = $('table.fault-table').find('tbody tr');
-        var circles = new Array(trs);
+        circles = new Array(trs);
         trs.toArray().forEach(function (tr, i) {
             $(tr).on('click', function () {
                 var self = $(this);
@@ -45,14 +45,17 @@ function GenericFaultAnalyzer() {
     }
 
     function setupTrigger() {
-        var faultRadius = $('input.fault-radius').val();
-        faultRadius = parseInt(faultRadius) * 1000;
         var networkId = window.network_editor.network_id;
         Util.setupAjaxForCSRF();
 
         $('#analyze-form').on('submit', function (e) {
+            // circles.forEach(function (circle) {
+            //    circle.remove();
+            // });
             var method = $(this).attr('method');
             var url = $(this).data('url');
+            var faultRadius = $('input.fault-radius').val();
+            faultRadius = parseInt(faultRadius) * 1000;
             $.ajax({
                 type: method,
                 url: url,
